@@ -1,0 +1,114 @@
+﻿@page "/khoi-tao-hoc-ba"
+@rendermode InteractiveServer
+@using DigHocBaUI.Models
+
+<div class="page-wrapper">
+    <div class="toolbar">
+        <h2 class="page-title">Khởi tạo & Ký số học bạ</h2>
+        <div class="filter-group">
+            <select class="form-select"><option>Trạng thái</option></select>
+            <select class="form-select"><option>Chọn Khối</option></select>
+            <select class="form-select"><option>Chọn Lớp</option></select>
+            <div class="search-box">
+                <input type="text" placeholder="Nhập tên/ số CCCD" />
+                <button class="btn-search">
+                    <svg width="16" height="16" fill="white" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <button class="btn btn-blue">Khởi tạo</button>
+        <button class="btn btn-green">Ký số</button>
+        <button class="btn btn-red">Hủy Học bạ</button>
+        <button class="btn btn-blue-outline">Xuất file</button>
+    </div>
+
+    <div class="grid-panel">
+        <table class="vnedu-table">
+            <thead>
+                <tr>
+                    <th width="40"><input type="checkbox" /></th>
+                    <th>STT</th>
+                    <th>Mã định danh</th>
+                    <th class="text-start">Họ và tên</th>
+                    <th>Ngày sinh</th>
+                    <th>Số môn đã ký</th>
+                    <th>Trạng thái</th>
+                    <th>GVCN</th>
+                    <th>Hiệu trưởng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in PagedList)
+                {
+                    <tr>
+                        <td><input type="checkbox" /></td>
+                        <td>@item.STT</td>
+                        <td>@item.MaDinhDanh</td>
+                        <td class="text-start font-bold">@item.HoTen</td>
+                        <td>@item.NgaySinh</td>
+                        <td><span class="badge-pill">@item.SoMonDaKy</span></td>
+                        <td class="@GetStatusColor(item.TrangThaiKhoiTao)">@item.TrangThaiKhoiTao</td>
+                        <td class="@GetStatusColor(item.TrangThaiGVCN)">@item.TrangThaiGVCN</td>
+                        <td class="@GetStatusColor(item.TrangThaiHieuTruong)">@item.TrangThaiHieuTruong</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (TotalPages > 1)
+    {
+        <div class="pagination-container">
+            <span class="pagination-info">Trang @currentPage / @TotalPages</span>
+            <div class="pagination-controls">
+                <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => ChangePage(currentPage - 1)">‹</button>
+                @for (int i = 1; i <= TotalPages; i++)
+                {
+                    var p = i;
+                    <button class="page-btn @(currentPage == p ? "active" : "")" @onclick="() => ChangePage(p)">@p</button>
+                }
+                <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => ChangePage(currentPage + 1)">›</button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private int currentPage = 1;
+    private int pageSize = 5;
+    private List<HocBa> FullList = new();
+
+    private int TotalItems => FullList.Count;
+    private int TotalPages => (int)Math.Ceiling((double)TotalItems / pageSize);
+    private List<HocBa> PagedList => FullList.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+    private void ChangePage(int newPage)
+    {
+        if (newPage >= 1 && newPage <= TotalPages) currentPage = newPage;
+    }
+
+    private string GetStatusColor(string s) => (s.Contains("Chưa") || s.Contains("Đợi")) ? "text-red" : "text-black";
+
+    protected override void OnInitialized()
+    {
+        for (int i = 1; i <= 18; i++)
+        {
+            FullList.Add(new HocBa
+            {
+                STT = i,
+                MaDinhDanh = $"0265..{i}",
+                HoTen = $"Học sinh {i}",
+                NgaySinh = "18/09/2016",
+                SoMonDaKy = "1/11",
+                TrangThaiKhoiTao = i % 3 == 0 ? "Chưa khởi tạo" : "Đã khởi tạo",
+                TrangThaiGVCN = "Đợi ký",
+                TrangThaiHieuTruong = "Đợi ký"
+            });
+        }
+    }
+}

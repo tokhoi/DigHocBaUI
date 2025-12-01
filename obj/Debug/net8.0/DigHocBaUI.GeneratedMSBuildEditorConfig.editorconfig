@@ -1,0 +1,97 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = DigHocBaUI
+build_property.RootNamespace = DigHocBaUI
+build_property.ProjectDir = D:\STUDY\VS C#\Some Demo PAge\DigHocBaUI\DigHocBaUI\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = D:\STUDY\VS C#\Some Demo PAge\DigHocBaUI\DigHocBaUI
+build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/App.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/Counter.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/Error.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/Weather.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Routes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/FormComponents/DangNhapDongBo.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGb3JtQ29tcG9uZW50c1xEYW5nTmhhcERvbmdCby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-k333v01pqk
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/FormComponents/EditDangKyChuKySo.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGb3JtQ29tcG9uZW50c1xFZGl0RGFuZ0t5Q2h1S3lTby5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-s0cxeytu7k
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-rthkok19l8
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-7l9s5fp2nc
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/DangKyChuKySo.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEYW5nS3lDaHVLeVNvLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-b6uqbgrggm
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/DanhGiaTongHop.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEYW5oR2lhVG9uZ0hvcC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-x4mqpkvoyw
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/Dashboard.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xEYXNoYm9hcmQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-1eyq9b8q4t
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/KhoiTaoHocBa.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xLaG9pVGFvSG9jQmEucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-bmbxg7j5ag
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/KySoMonHoc.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xLeVNvTW9uSG9jLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-2njfp3eqe8
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/PhanCongGiangDay.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQaGFuQ29uZ0dpYW5nRGF5LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-p36fvz9mho
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/PhatHanhHocBa.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xQaGF0SGFuaEhvY0JhLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-62mwk8gt23
+
+[D:/STUDY/VS C\#/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/QuanLyDongBo.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xRdWFuTHlEb25nQm8ucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-k6e1utx3fv

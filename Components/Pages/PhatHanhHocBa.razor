@@ -1,0 +1,86 @@
+﻿@page "/phat-hanh-hoc-ba"
+@rendermode InteractiveServer
+@using DigHocBaUI.Models
+
+<div class="page-wrapper">
+    <div class="tabs">
+        <div class="tab-item active">Danh sách học bạ</div>
+        <div class="tab-item">Danh sách gói tin</div>
+    </div>
+
+    <div class="toolbar">
+        <h2 class="page-title">Danh sách học bạ</h2>
+        <div class="actions">
+            <button class="btn btn-blue">Đóng gói và ký</button>
+        </div>
+    </div>
+
+    <div class="grid-panel">
+        <table class="vnedu-table">
+            <thead>
+                <tr>
+                    <th width="40"><input type="checkbox" /></th>
+                    <th width="60">STT</th>
+                    <th width="80">Lớp</th>
+                    <th width="150">Số học bạ<br>đã phát hành</th>
+                    <th width="150">Số học bạ<br>đã lưu hành</th>
+                    <th>Các trạng thái khác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in PagedList)
+                {
+                    <tr>
+                        <td><input type="checkbox" /></td>
+                        <td>@item.STT</td>
+                        <td>@item.Lop</td>
+                        <td>@item.SoHocBaPhatHanh</td>
+                        <td>@item.SoHocBaPhatHanh</td>
+                        <td class="badges-cell">
+                            <span class="badge badge-cyan">Đã ban hành: @(item.IsBanHanh ? "0" : "42")</span>
+                            <span class="badge badge-yellow">Chờ xử lý: 0</span>
+                            <span class="badge badge-green">Đang lưu hành tại Sở: 0</span>
+                            <span class="badge badge-purple">Đang lưu hành tại Bộ: 0</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (TotalPages > 1)
+    {
+        <div class="pagination-container">
+            <span class="pagination-info">Trang @currentPage / @TotalPages</span>
+            <div class="pagination-controls">
+                <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => ChangePage(currentPage - 1)">‹</button>
+                @for (int i = 1; i <= TotalPages; i++)
+                {
+                    var p = i;
+                    <button class="page-btn @(currentPage == p ? "active" : "")" @onclick="() => ChangePage(p)">@p</button>
+                }
+                <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => ChangePage(currentPage + 1)">›</button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private int currentPage = 1;
+    private int pageSize = 5;
+    private List<HocBa> FullList = new();
+
+    private int TotalItems => FullList.Count;
+    private int TotalPages => (int)Math.Ceiling((double)TotalItems / pageSize);
+    private List<HocBa> PagedList => FullList.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+    private void ChangePage(int newPage) { if (newPage >= 1 && newPage <= TotalPages) currentPage = newPage; }
+
+    protected override void OnInitialized()
+    {
+        for (int i = 1; i <= 12; i++)
+        {
+            FullList.Add(new HocBa { STT = i, Lop = $"1A{i}", SoHocBaPhatHanh = "0/44", IsBanHanh = i % 2 == 0 });
+        }
+    }
+}

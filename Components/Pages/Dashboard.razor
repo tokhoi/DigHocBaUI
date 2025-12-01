@@ -1,0 +1,337 @@
+﻿@page "/dashboard"
+@rendermode InteractiveServer
+
+<div class="dashboard-wrapper">
+    <div class="top-header">
+        <div>
+            <h2 class="page-heading">Dashboard</h2>
+            <div class="breadcrumb">Admin Trường › Thống kê tổng quan</div>
+        </div>
+        <div class="header-controls">
+            <select class="custom-select"><option>2023 - 2024</option></select>
+            <select class="custom-select"><option>Tiểu học</option></select>
+            <button class="btn-settings">⚙</button>
+            <div class="user-profile">
+                <div class="avatar">A</div>
+                <div class="user-info">
+                    <span class="name">Admin Trường</span>
+                    <span class="role">THCS Mùa Xuân</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (IsOverview)
+    {
+        <div class="animate-fade-in">
+            <div class="cards-grid">
+                <div class="stat-card card-blue" @onclick='() => ShowDetail("Học sinh")'>
+                    <div class="card-icon-bg">🎓</div>
+                    <div class="card-content">
+                        <div class="card-label">Học sinh</div>
+                        <div class="card-number">803</div>
+                        <div class="card-link">Xem chi tiết ➝</div>
+                    </div>
+                </div>
+                <div class="stat-card card-teal">
+                    <div class="card-icon-bg">📚</div>
+                    <div class="card-content">
+                        <div class="card-label">Khối</div>
+                        <div class="card-number">5</div>
+                        <div class="card-link">Xem chi tiết ➝</div>
+                    </div>
+                </div>
+                <div class="stat-card card-orange">
+                    <div class="card-icon-bg">🏫</div>
+                    <div class="card-content">
+                        <div class="card-label">Lớp</div>
+                        <div class="card-number">76</div>
+                        <div class="card-link">Xem chi tiết ➝</div>
+                    </div>
+                </div>
+                <div class="stat-card card-red" @onclick='() => ShowDetail("Nhân sự")'>
+                    <div class="card-icon-bg">👩‍🏫</div>
+                    <div class="card-content">
+                        <div class="card-label">Nhân sự</div>
+                        <div class="card-number">379</div>
+                        <div class="card-link">Xem chi tiết ➝</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-box">
+                    <h3 class="chart-title">Ký số học bạ</h3>
+                    <div class="chart-body">
+                        <div class="pie-solid enhanced" style="background: conic-gradient(#3b82f6 0% 97.51%, #10b981 97.51% 100%);">
+                            <div class="pie-hover-info">
+                                <div>🔵 Chưa khởi tạo: 744</div>
+                                <div>🟢 Đã khởi tạo: 19</div>
+                            </div>
+                        </div>
+                        <div class="pie-center-overlay">97.5%</div>
+                        <div class="chart-footer">
+                            <div class="legend-grid two-cols">
+                                <div class="legend-item"><span class="dot blue"></span> Chưa khởi tạo</div>
+                                <div class="legend-item"><span class="dot green"></span> Đã khởi tạo</div>
+                                <div class="legend-item"><span class="dot yellow"></span> GVCN đã ký</div>
+                                <div class="legend-item"><span class="dot red"></span> Hiệu trưởng ký</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <h3 class="chart-title">Kết quả giáo dục</h3>
+                    <div class="chart-body">
+                        <div class="pie-solid enhanced" style="background: @GetConicGradient();">
+                            @{
+                                double currentStart = 0;
+                            }
+                            @foreach (var item in EducationData)
+                            {
+                                // Gọi hàm mới đã sửa lỗi góc độ
+                                string labelStyle = GetPieLabelStyle(currentStart, item.Percent);
+
+                                if (item.Percent > 5)
+                                {
+                                    <div class="pie-label-auto" style="@labelStyle">
+                                        @item.Percent%
+                                    </div>
+                                }
+                                currentStart += item.Percent;
+                            }
+                        </div>
+                    </div>
+                    <div class="chart-footer">
+                        <div class="legend-grid two-cols">
+                            @foreach (var item in EducationData)
+                            {
+                                <div class="legend-item">
+                                    <span class="dot" style="background-color: @item.Color"></span> @item.Label
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-box">
+                    <h3 class="chart-title">Khen thưởng</h3>
+                    <div class="chart-body">
+                        <div class="pie-solid enhanced" style="background: conic-gradient(#3b82f6 0% 100%);">
+                            <div class="pie-center-overlay white">100%</div>
+                        </div>
+                    </div>
+                    <div class="chart-footer">
+                        <div class="legend-list">
+                            <div class="legend-item"><span class="dot blue"></span> Khen thưởng cuối năm</div>
+                            <div class="legend-item"><span class="dot yellow"></span> Khen thưởng đột xuất</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-grid mt-4">
+                <div class="chart-box small-box">
+                    <h3 class="chart-title">Lên lớp</h3>
+                    <div class="chart-body">
+                        <div class="pie-solid large enhanced" style="background: conic-gradient(#3b82f6 0% 100%);">
+                            <div class="pie-center-overlay white large">100%</div>
+                        </div>
+                    </div>
+                    <div class="chart-footer">
+                        <div class="legend-row">
+                            <div class="legend-item"><span class="dot cyan"></span> Lên lớp</div>
+                            <div class="legend-item"><span class="dot red"></span> Không lên lớp</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-box big-box">
+                    <div class="chart-header-row">
+                        <h3 class="chart-title">Cảnh báo thông tin học sinh</h3>
+                        <div class="legend-row">
+                            <div class="legend-item"><span class="dot red"></span> Chưa đủ thông tin</div>
+                            <div class="legend-item"><span class="dot blue"></span> Đã đủ thông tin</div>
+                        </div>
+                    </div>
+                    <div class="bar-chart-container">
+                        <div class="y-axis"><span>210</span><span>180</span><span>150</span><span>120</span><span>90</span><span>60</span><span>30</span><span>0</span></div>
+                        <div class="bars-area">
+                            @foreach (var item in WarningData)
+                            {
+                                <div class="bar-group">
+                                    <div class="bar red" style="--h: @((item.Incomplete * 100.0 / 210.0).ToString("0.0", System.Globalization.CultureInfo.InvariantCulture))%;">
+                                        <div class="bar-tooltip">Chưa đủ: @item.Incomplete</div>
+                                    </div>
+                                    <div class="bar blue" style="--h: @((item.Complete * 100.0 / 210.0).ToString("0.0", System.Globalization.CultureInfo.InvariantCulture))%;">
+                                        <div class="bar-tooltip">Đã đủ: @item.Complete</div>
+                                    </div>
+                                    <div class="x-label">@item.Label</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>  
+            </div> <div class="chart-box full-width mt-4">
+                <div class="chart-header-row">
+                    <h3 class="chart-title">Phát hành/ thu hồi học bạ</h3>
+                    <div class="legend-row">
+                        <div class="legend-item"><span class="dot green"></span> Đang lưu hành Bộ</div>
+                        <div class="legend-item"><span class="dot yellow"></span> Tổng số học bạ đã thu hồi</div>
+                    </div>
+                </div>
+
+                <div class="bar-chart-container large-chart">
+                    <div class="y-axis">
+                        <span>210</span><span>180</span><span>150</span><span>120</span><span>90</span><span>60</span><span>30</span><span>0</span>
+                    </div>
+
+                    <div class="bars-area">
+                        @foreach (var item in IssueData)
+                        {
+                            <div class="bar-group wide-group">
+                                <div class="bar green" style="--h: @((item.Active * 100.0 / 210.0).ToString("0.0", System.Globalization.CultureInfo.InvariantCulture))%;">
+                                    <div class="bar-val">@item.Active</div>
+                                    <div class="bar-tooltip">
+                                        <div><strong>@item.Label</strong></div>
+                                        <div>🟢 Đang lưu hành: @item.Active</div>
+                                        <div>🟡 Đã thu hồi: @item.Recalled</div>
+                                    </div>
+                                </div>
+                                <div class="bar yellow small-bar" style="--h: @((item.Recalled * 100.0 / 210.0).ToString("0.0", System.Globalization.CultureInfo.InvariantCulture))%;">
+                                    @if (item.Recalled > 0)
+                                    {
+                                        <div class="bar-val">@item.Recalled</div>
+                                    }
+                                    <div class="bar-tooltip">
+                                        <div><strong>@item.Label</strong></div>
+                                        <div>🟢 Đang lưu hành: @item.Active</div>
+                                        <div>🟡 Đã thu hồi: @item.Recalled</div>
+                                    </div>
+                                </div>
+
+                                <div class="x-label">@item.Label</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="detail-container animate-slide-up">
+            <div class="detail-header">
+                <button class="btn-back" @onclick="ShowOverview">⬅ Quay lại Dashboard</button>
+                <div class="detail-meta">
+                    <h1>Thống kê @CurrentCategory</h1>
+                    <p>Tổng số: <strong>803</strong> bản ghi</p>
+                </div>
+            </div>
+            <div class="detail-content">
+                <div class="left-panel">
+                    <h4 class="panel-title">Phân bố theo khối</h4>
+                    <div class="bar-chart-wrapper">
+                        @foreach (var item in BarData)
+                        {
+                            <div class="bar-item">
+                                <div class="bar-info"><span class="bar-label">@item.Label</span><span class="bar-val">@item.Value hs</span></div>
+                                <div class="progress-track"><div class="progress-fill" style="--w: @item.Percent%;"></div></div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="table-toolbar">
+                        <div class="big-search"><input type="text" placeholder="Tìm kiếm..." /><button>🔍</button></div>
+                        <select class="big-select"><option>Chọn Lớp 1A</option></select>
+                        <button class="btn-filter">Lọc</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="big-table">
+                            <thead><tr><th>STT</th><th>Mã ĐD</th><th class="text-left">Họ tên</th><th>Ngày sinh</th><th>Lớp</th></tr></thead>
+                            <tbody>
+                                @for (int i = 1; i <= 10; i++)
+                                {
+                                    <tr><td>@i</td><td>14031700@(10 + i)</td><td class="text-left bold-name">HS @i</td><td>09/11/2017</td><td>1A</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private bool IsOverview = true;
+    private string CurrentCategory = "";
+    public class PieItem { public string Label { get; set; } = ""; public double Percent { get; set; } public string Color { get; set; } = ""; }
+    class BarItem { public string Label { get; set; } = ""; public int Value { get; set; } public int Percent { get; set; } }
+    class WarningItem { public string Label { get; set; } = ""; public int Incomplete { get; set; } public int Complete { get; set; } }
+
+    private List<PieItem> EducationData = new List<PieItem>
+    {
+        new PieItem { Label = "Xuất sắc", Percent = 24.6, Color = "#ef4444" },
+        new PieItem { Label = "Tốt", Percent = 47.7, Color = "#f59e0b" },
+        new PieItem { Label = "Hoàn thành", Percent = 4.7, Color = "#10b981" },
+        new PieItem { Label = "Chưa hoàn thành", Percent = 23.0, Color = "#3b82f6" }
+    };
+
+    private List<BarItem> BarData = new List<BarItem>
+    {
+        new BarItem { Label = "Khối 5", Value = 198, Percent = 100 },
+        new BarItem { Label = "Khối 4", Value = 149, Percent = 75 },
+        new BarItem { Label = "Khối 3", Value = 160, Percent = 80 },
+        new BarItem { Label = "Khối 2", Value = 157, Percent = 79 },
+        new BarItem { Label = "Khối 1", Value = 139, Percent = 70 }
+    };
+
+    private List<WarningItem> WarningData = new List<WarningItem>
+    {
+        new WarningItem { Label = "Khối 1", Incomplete = 57, Complete = 82 },
+        new WarningItem { Label = "Khối 2", Incomplete = 157, Complete = 0 },
+        new WarningItem { Label = "Khối 3", Incomplete = 160, Complete = 0 },
+        new WarningItem { Label = "Khối 4", Incomplete = 149, Complete = 0 },
+        new WarningItem { Label = "Khối 5", Incomplete = 198, Complete = 0 },
+    };
+
+    private void ShowDetail(string category) { CurrentCategory = category; IsOverview = false; }
+    private void ShowOverview() { IsOverview = true; }
+
+    private string GetConicGradient()
+    {
+        var parts = new List<string>();
+        double current = 0;
+        foreach (var item in EducationData)
+        {
+            double end = current + item.Percent;
+            parts.Add($"{item.Color} {current.ToString(System.Globalization.CultureInfo.InvariantCulture)}% {end.ToString(System.Globalization.CultureInfo.InvariantCulture)}%");
+            current += item.Percent;
+        }
+        return $"conic-gradient({string.Join(", ", parts)})";
+    }
+
+    private string GetPieLabelStyle(double startPercent, double slicePercent)
+    {
+        double midPercent = startPercent + (slicePercent / 2);
+
+        double degrees = midPercent * 3.6;
+
+        degrees = degrees - 90;
+
+        return $"transform: translate(-50%, -50%) rotate({degrees}deg) translate(60px) rotate({-degrees}deg);";
+    }
+
+    class IssueItem { public string Label { get; set; } = ""; public int Active { get; set; } public int Recalled { get; set; } }
+    private List<IssueItem> IssueData = new List<IssueItem>
+    {
+        new IssueItem { Label = "Khối 1", Active = 139, Recalled = 0 },
+        new IssueItem { Label = "Khối 2", Active = 157, Recalled = 0 },
+        new IssueItem { Label = "Khối 3", Active = 160, Recalled = 5 }, 
+        new IssueItem { Label = "Khối 4", Active = 149, Recalled = 0 },
+        new IssueItem { Label = "Khối 5", Active = 198, Recalled = 0 },
+    };
+}

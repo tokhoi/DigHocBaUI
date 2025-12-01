@@ -1,0 +1,471 @@
+﻿/* --- TRANG QUẢN LÝ ĐỒNG BỘ --- */
+.page-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease-out;
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f5f7fa;
+    min-height: 100vh;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- LAYOUT CHUNG CỦA TRANG --- */
+.page-wrapper {
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: transparent;
+    min-height: 100%;
+}
+
+/* Header */
+.header-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.page-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+    flex: 1;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.w-150 {
+    width: 150px;
+}
+
+.w-200 {
+    width: 200px;
+}
+
+.btn-icon {
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: #666;
+}
+
+/* --- SYNC CARDS (4 Tab lớn) --- */
+.sync-cards-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.sync-card {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border: 1px solid transparent;
+    position: relative;
+    transition: all 0.2s ease-in-out;
+    min-width: 200px;
+}
+
+    .sync-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Trạng thái Active: Gradient Xanh */
+    .sync-card.active {
+        background: linear-gradient(135deg, #2b57f0 0%, #00c6ff 100%);
+        color: white;
+        box-shadow: 0 8px 20px rgba(43, 87, 240, 0.25);
+        border: none;
+    }
+
+/* Mũi tên chỉ xuống khi Active */
+.arrow-down {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #00c6ff; /* Màu trùng với điểm cuối gradient */
+    z-index: 10;
+}
+
+/* Badge trạng thái */
+.card-status {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+    .card-status.green {
+        background: #e6f9ed;
+        color: #28a745;
+    }
+
+    .card-status.red {
+        background: #ffe5e5;
+        color: #dc3545;
+    }
+
+/* Khi active, badge đổi màu nền trắng cho nổi bật */
+.sync-card.active .card-status {
+    background: white;
+}
+
+    .sync-card.active .card-status.green {
+        color: #28a745;
+    }
+
+    .sync-card.active .card-status.red {
+        color: #dc3545;
+    }
+
+.card-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.card-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+.count {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* --- TOOLBAR & FILTER --- */
+.toolbar-container {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.filters-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.form-select {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    outline: none;
+    font-size: 14px;
+    background-color: white;
+    width: 150px;
+}
+
+/* Search Box */
+.search-box-large {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    overflow: hidden;
+    height: 38px;
+    margin-left:50px;
+    min-width: 300px;
+    flex: 1;
+    max-width: 500px;
+}
+
+    .search-box-large input {
+        border: none;
+        outline: none;
+        padding: 0 12px;
+        flex: 1;
+        font-size: 14px;
+        height: 100%;
+    }
+
+/* Nút Tìm kiếm */
+.btn-search-blue {
+    background-color: #2b57f0;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    height: 100%;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+    .btn-search-blue:hover {
+        background-color: #1a44cc;
+    }
+
+/* Nút Đồng bộ */
+.btn-sync-green {
+    background-color: #0e6c75;
+    color: white;
+    border: none;
+    padding: 9px 24px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 3px 6px rgba(14, 108, 117, 0.2);
+    transition: all 0.2s;
+}
+
+    .btn-sync-green:hover {
+        background-color: #0b555c;
+        transform: translateY(-1px);
+    }
+
+/* --- SUB TABS --- */
+.sub-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.sub-tab {
+    background: white;
+    border: 1px solid #e5e7eb;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #6b7280;
+    border-radius: 4px;
+    transition: 0.2s;
+}
+
+    .sub-tab:hover {
+        background-color: #f9fafb;
+        color: #333;
+    }
+
+    .sub-tab.active {
+        background-color: #2b57f0;
+        color: white;
+        border-color: #2b57f0;
+    }
+
+
+. /* --- TABLE STYLES (ĐÃ CHỈNH SỬA ĐẸP HƠN) --- */
+.grid-panel {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0; /* Viền ngoài nhạt màu xám xanh */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    margin-top: 15px; /* Tạo khoảng cách với toolbar bên trên */
+}
+
+.vnedu-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px; /* Tăng size chữ lên một chút cho dễ đọc */
+    color: #334155;
+}
+
+    /* Header của bảng */
+    .vnedu-table th {
+        background-color: #f8fafc; /* Màu nền header xám rất nhạt */
+        padding: 16px 15px; /* Tăng padding lên 16px (trước có thể là 12px) */
+        font-weight: 700;
+        color: #475569;
+        border-bottom: 2px solid #e2e8f0; /* Đường kẻ đậm hơn dưới header */
+        text-align: center;
+        white-space: nowrap; /* Không cho tiêu đề xuống dòng */
+    }
+
+    /* Các dòng dữ liệu */
+    .vnedu-table td {
+        padding: 16px 15px; /* Tăng padding dọc để dòng cao và thoáng hơn */
+        border-bottom: 1px solid #f1f5f9; /* Đường kẻ mờ ngăn cách các dòng */
+        text-align: center;
+        vertical-align: middle; /* Căn giữa theo chiều dọc */
+        line-height: 1.5; /* Tăng chiều cao dòng chữ */
+    }
+
+    /* Hiệu ứng khi di chuột vào dòng */
+    .vnedu-table tr:hover td {
+        background-color: #f0f9ff; /* Màu xanh dương rất nhạt khi hover */
+        cursor: default;
+    }
+
+    /* Cột STT và Checkbox */
+    .vnedu-table th:first-child,
+    .vnedu-table td:first-child {
+        padding-left: 20px; /* Thụt lề trái cho cột đầu tiên */
+        width: 50px;
+    }
+
+.text-start {
+    text-align: left !important;
+}
+
+.vnedu-table input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #2563eb; 
+    margin-top: 4px; 
+}
+
+.vnedu-table td:nth-child(3),
+.vnedu-table td:nth-child(5),
+    font-family: 'Consolas', 'Monaco', monospace; 
+    font-weight: 500;
+}
+
+.text-wrap {
+    white-space: normal !important;
+    max-width: 350px;
+    text-align: left !important;
+}
+
+/* --- EMPTY STATE --- */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #9ca3af;
+    padding: 40px;
+}
+
+    .empty-state svg {
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+
+    .empty-state p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+.pagination-simple {
+    padding: 12px 20px;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+    align-items: center;
+    background: #fff;
+    border-top: 1px solid #eee;
+}
+
+    .pagination-simple button {
+        background: white;
+        border: 1px solid #e5e7eb;
+        min-width: 30px;
+        height: 30px;
+        border-radius: 4px;
+        cursor: pointer;
+        color: #555;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+    }
+
+        .pagination-simple button:hover {
+            background-color: #f3f4f6;
+        }
+
+    .pagination-simple input {
+        width: 40px;
+        height: 30px;
+        text-align: center;
+        border: 1px solid #e5e7eb;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    .pagination-simple select {
+        height: 30px;
+        border: 1px solid #e5e7eb;
+        border-radius: 4px;
+        outline: none;
+    }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .sync-cards-container {
+        flex-direction: column;
+    }
+
+    .toolbar-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filters-row {
+        flex-direction: column;
+    }
+
+    .search-box-large {
+        max-width: 100%;
+        min-width: 0;
+        min-height: 40px;
+    }
+    .btn-search-blue {
+        max-width: 100%;
+        min-width: 0;
+        min-height: 40px;
+    }
+
+    .sub-tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 5px;
+    }
+
+    .grid-panel {
+        overflow-x: auto;
+    }
+
+    .vnedu-table {
+        min-width: 1000px; 
+    }
+}

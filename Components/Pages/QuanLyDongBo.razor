@@ -1,0 +1,282 @@
+﻿@page "/quan-ly-dong-bo"
+@rendermode InteractiveServer
+@using DigHocBaUI.Components.FormComponents
+
+<div class="page-wrapper">
+    <div class="header-row">
+        <h2 class="page-title">Quản lý đồng bộ</h2>
+        <div class="header-actions">
+            <select class="form-select w-150"><option>2023 - 2024</option></select>
+            <select class="form-select w-200"><option>Trung học cơ sở</option></select>
+            <button class="btn-icon">⚙</button>
+        </div>
+    </div>
+
+    <div class="sync-cards-container">
+        @foreach (var tab in TabList)
+        {
+            <div class="sync-card @(activeTab == tab.Id ? "active" : "")" @onclick="() => SwitchTab(tab.Id)">
+                <div class="card-status @(tab.IsSynced ? "green" : "red")">
+                    @(tab.IsSynced ? "✔ Đã đồng bộ" : "✖ Chưa đồng bộ")
+                </div>
+                <div class="card-title">@tab.Title</div>
+                <div class="card-info">
+                    <span>🔢 Số lượng đồng bộ</span>
+                    <span class="count">@tab.Count</span>
+                </div>
+                @if (activeTab == tab.Id)
+                {
+                    <div class="arrow-down"></div>
+                }
+            </div>
+        }
+    </div>
+
+    <div class="toolbar-container">
+        <div class="filters-row">
+            @if (activeTab == 2)
+            {
+                <select class="form-select"><option>Chọn khối</option></select>
+                <select class="form-select"><option>Chọn Lớp</option></select>
+                <select class="form-select"><option>Cả năm</option></select>
+                <select class="form-select"><option>Chọn giáo viên</option></select>
+            }
+            else if (activeTab == 3 || activeTab == 4)
+            {
+                <select class="form-select"><option>Chọn lớp</option></select>
+            }
+
+            <div class="search-box-large">
+                <input type="text" placeholder="@GetSearchPlaceholder()" />
+                <button class="btn-search-blue">Tìm kiếm</button>
+            </div>
+        </div>
+
+        <div class="action-row">
+            <button class="btn-sync-green" @onclick="() => showLoginModal = true">
+                ⟳ Đồng bộ
+            </button>
+        </div>
+    </div>
+
+    @if (activeTab == 2)
+    {
+        <div class="sub-tabs">
+            <button class="sub-tab @(subTab == 1 ? "active" : "")" @onclick="() => subTab = 1">Phân công GVCN</button>
+            <button class="sub-tab @(subTab == 2 ? "active" : "")" @onclick="() => subTab = 2">Phân công giảng dạy</button>
+            <button class="sub-tab @(subTab == 3 ? "active" : "")" @onclick="() => subTab = 3">Phân công quản lý</button>
+        </div>
+    }
+
+    <div class="grid-panel mt-2">
+        <table class="vnedu-table">
+            <thead>
+                <tr>
+                    <th width="40"><input type="checkbox" /></th>
+                    <th width="50">STT</th>
+                    <th>Mã định danh</th>
+
+                    @if (activeTab == 1) // Tab 1: Người dùng
+                    {
+                        <th class="text-start">Họ và tên</th>
+                        <th>CCCD/CMND</th>
+                        <th>Tài khoản</th>
+                        <th>Nhóm quyền</th>
+                        <th>Cảnh báo</th>
+                    }
+                    else if (activeTab == 2) // Tab 2: Phân công
+                    {
+                        @if (subTab == 1)
+                        {
+                            <th class="text-start">Giáo viên chủ nhiệm</th>
+                            <th>Lớp</th>
+                            <th>Học kỳ</th>
+     }
+                        else if (subTab == 2)
+                        {
+                            <th class="text-start">Giáo viên</th>
+                            <th class="text-start">Môn dạy</th>
+                            <th>Học kỳ</th>
+     }
+                        else
+                        {
+                            <th class="text-start">Giáo viên</th>
+                            <th>Chức vụ</th>
+     }
+                    }
+                    else if (activeTab == 3) // Tab 3: Học sinh
+                    {
+                        <th class="text-start">Họ và tên học sinh</th>
+                        <th>Ngày sinh</th>
+                        <th>Cảnh báo</th>
+                    }
+                    else // Tab 4: Kết quả
+                    {
+                        <th class="text-start">Họ và tên học sinh</th>
+                        <th>Điểm TB</th>
+                        <th>Hạnh kiểm</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var i in PagedListIndices)
+                {
+                    <tr>
+                        <td><input type="checkbox" /></td>
+                        <td>@i</td>
+                        <td>0012345678@(i)</td>
+
+                        @if (activeTab == 1)
+                        {
+                            <td class="text-start">Nguyễn Văn A @i</td>
+                            <td>0123456789</td>
+                            <td>admin@(i)</td>
+                            <td>GVCN</td>
+                            <td></td>
+                        }
+                        else if (activeTab == 2)
+                        {
+                            <td class="text-start">Trần Thị B @i</td>
+                            if (subTab == 1)
+                            {
+                                <td>6A1</td>
+                                <td>HK1</td>
+         }
+                            else if (subTab == 2)
+                            {
+                                <td class="text-start">Toán, Lý</td>
+                                <td>HK1</td>
+         }
+                            else
+                            {
+                                <td>Hiệu trưởng</td>
+                            }
+                        }
+                    </tr>
+                }
+
+                @if (TotalItems == 0)
+                {
+                    <tr>
+                        <td colspan="10" style="height: 300px; text-align: center;">
+                            <div class="empty-state">
+                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                                <p>Không tìm thấy dữ liệu</p>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (TotalPages > 1)
+        {
+            <div class="pagination-container">
+                <span class="pagination-info">Trang @currentPage / @TotalPages</span>
+                <div class="pagination-controls">
+                    <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => ChangePage(currentPage - 1)">‹</button>
+
+                    @for (int i = 1; i <= TotalPages; i++)
+                    {
+                        var p = i;
+                        if (p == 1 || p == TotalPages || (p >= currentPage - 1 && p <= currentPage + 1))
+                        {
+                            <button class="page-btn @(currentPage == p ? "active" : "")" @onclick="() => ChangePage(p)">@p</button>
+                        }
+                        else if (p == currentPage - 2 || p == currentPage + 2)
+                        {
+                            <span style="padding:0 5px; color: #999;">...</span>
+                        }
+                    }
+
+                    <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => ChangePage(currentPage + 1)">›</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <DangNhapDongBo IsVisible="showLoginModal" OnClose="HandleLoginClose" />
+</div>
+
+@code {
+    // --- STATE VARIABLES ---
+    private int activeTab = 1;
+    private int subTab = 1;
+    private bool showLoginModal = false;
+
+    // --- PAGINATION VARIABLES ---
+    private int currentPage = 1;
+    private int pageSize = 10;
+
+    // --- DATA MODELS ---
+    public class SyncTabInfo
+    {
+        public int Id { get; set; }
+        public string Title { get; set; } = "";
+        public string Count { get; set; } = "";
+        public bool IsSynced { get; set; }
+    }
+
+    private List<SyncTabInfo> TabList = new List<SyncTabInfo> {
+        new SyncTabInfo { Id = 1, Title = "1. Quản lý người dùng", Count = "379/379", IsSynced = true },
+        new SyncTabInfo { Id = 2, Title = "2. Phân công nhân sự", Count = "689/689", IsSynced = true },
+        new SyncTabInfo { Id = 3, Title = "3. Thông tin học sinh", Count = "0/0", IsSynced = false },
+        new SyncTabInfo { Id = 4, Title = "4. Kết quả học tập", Count = "0/0", IsSynced = false }
+    };
+
+    // --- LOGIC HELPERS ---
+
+    private int TotalItems => activeTab switch
+    {
+        1 => 379, 
+        2 => 689, 
+        _ => 0   
+    };
+
+    // 2. Tính tổng số trang
+    private int TotalPages => (int)Math.Ceiling((double)TotalItems / pageSize);
+
+    // 3. Tạo danh sách số thứ tự cho trang hiện tại (Để render vòng lặp)
+    private List<int> PagedListIndices
+    {
+        get
+        {
+            if (TotalItems == 0) return new List<int>();
+            var start = (currentPage - 1) * pageSize + 1;
+            var count = Math.Min(pageSize, TotalItems - start + 1);
+            // Trả về list int: [1, 2, ..., 10] hoặc [11, 12, ..., 20]
+            return Enumerable.Range(start, count).ToList();
+        }
+    }
+
+    // 4. Hàm chuyển trang
+    private void ChangePage(int newPage)
+    {
+        if (newPage >= 1 && newPage <= TotalPages)
+        {
+            currentPage = newPage;
+        }
+    }
+
+    // 5. Hàm chuyển Tab (Reset trang về 1)
+    private void SwitchTab(int tabIndex)
+    {
+        activeTab = tabIndex;
+        currentPage = 1;
+    }
+
+    private string GetSearchPlaceholder() => activeTab switch
+    {
+        3 => "Tìm kiếm theo tên học sinh",
+        4 => "Tìm kiếm theo tên học sinh",
+        _ => "Chọn giáo viên / Tìm kiếm..."
+    };
+
+    private void HandleLoginClose(bool isSuccess) { showLoginModal = false; }
+}

@@ -1,0 +1,226 @@
+﻿@page "/danh-gia-tong-hop"
+@rendermode InteractiveServer
+
+<div class="page-wrapper">
+    <div class="top-header">
+        <div>
+            <h2 class="page-heading">Tổng hợp & đánh giá kết quả giáo dục</h2>
+            @if (IsDetailView)
+            {
+                <div class="breadcrumb">
+                    <span class="back-link" @onclick="ShowOverview">← Quay lại danh sách</span>
+                    <span class="separator">/</span>
+                    <span class="current-class">Lớp @CurrentClassName</span>
+                </div>
+            }
+        </div>
+        <div class="header-controls">
+            <select class="custom-select"><option>2023 - 2024</option></select>
+            <select class="custom-select"><option>Trung học cơ sở</option></select>
+            <button class="btn-settings">⚙</button>
+            <div class="user-profile">
+                <div class="avatar">P</div>
+                <div class="user-info">
+                    <span class="name">Phan Thị Thanh</span>
+                    <span class="role">Giáo viên chủ nhiệm</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="animate-fade-in">
+
+        <div class="toolbar-container">
+            <div class="toolbar-left">
+                <div class="search-group">
+                    <input type="text" placeholder="@(IsDetailView ? "Tìm kiếm học sinh..." : "Tìm kiếm theo tên lớp...")" />
+                    <button class="btn-search">Tìm kiếm</button>
+                </div>
+
+                @if (!IsDetailView)
+                {
+                    <select class="filter-select"><option>Khối 6</option></select>
+                }
+                else
+                {
+                    <select class="filter-select"><option>Cả năm</option></select>
+                }
+            </div>
+        </div>
+
+        <div class="grid-panel">
+            @if (IsDetailView)
+            {
+                /* --- VIEW 2: CHI TIẾT (BẢNG ĐIỂM HỌC SINH) --- */
+                <div class="table-responsive">
+                    <table class="vnedu-table complex-table">
+                        <thead>
+                            <tr class="header-blue">
+                                <th rowspan="2" class="sticky-col stt">STT</th>
+                                <th rowspan="2" class="sticky-col name">Họ và tên</th>
+                                <th rowspan="2">Ngày sinh</th>
+                                <th rowspan="2">Giới tính</th>
+                                <th rowspan="2">Dân tộc</th>
+                                <th rowspan="2">Toán</th>
+                                <th rowspan="2">Ngữ văn</th>
+                                <th rowspan="2">Ngoại ngữ</th>
+                                <th rowspan="2">GDCD</th>
+                                <th rowspan="2">KHTN</th>
+                                <th rowspan="2">Lịch sử</th>
+                                <th colspan="2">Giáo dục thể chất</th>
+                                <th rowspan="2">HĐTN</th>
+                                <th rowspan="2">Danh hiệu</th>
+                                <th rowspan="2">Trạng thái</th>
+                            </tr>
+                            <tr class="header-blue">
+                                <th>Đ</th>
+                                <th>CĐ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var i in PagedListIndices)
+                            {
+                                bool isDangHoc = (i % 5 != 0); // Giả lập trạng thái
+                                                               <tr>
+                                                                   <td class="text-center sticky-col stt">@i</td>
+                                                                   <td class="text-left sticky-col name font-bold">Nguyễn Văn Học Sinh @i</td>
+                                                                   <td class="text-center">25/12/2012</td>
+                                                                   <td class="text-center">Nam</td>
+                                                                   <td class="text-center">Kinh</td>
+                                                                   <td class="text-center">@(6 + (i % 4))</td>
+                                                                   <td class="text-center">@(5 + (i % 4))</td>
+                                                                   <td class="text-center">@(7 + (i % 2))</td>
+                                                                   <td class="text-center">8.0</td>
+                                                                   <td class="text-center">7.5</td>
+                                                                   <td class="text-center">8.2</td>
+                                                                   <td class="text-center">Đ</td>
+                                                                   <td class="text-center"></td>
+                                                                   <td class="text-center">Đ</td>
+                                                                   <td class="text-center font-bold">@(i % 2 == 0 ? "HS Giỏi" : "HS Khá")</td>
+                                                                   <td class="text-center">
+                                        @if (isDangHoc)
+                                        {
+                                            <span class="status-dot-green" title="Đang học">●</span>
+                                        }
+                                        else
+                                        {
+
+                                            <span class="status-dot-red" title="Nghỉ học">●</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                /* --- VIEW 1: DANH SÁCH LỚP --- */
+                <table class="vnedu-table">
+                    <thead>
+                        <tr class="header-light">
+                            <th width="60">STT</th>
+                            <th class="text-left">Lớp</th>
+                            <th>Năm học</th>
+                            <th class="text-left">Giáo viên chủ nhiệm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="group-row"><td colspan="4">▼ Khối 06</td></tr>
+                        @foreach (var i in PagedListIndices)
+                        {
+                            <tr>
+                                <td class="text-center">@i</td>
+                                <td class="text-left">
+                                    <a class="class-link" @onclick='() => ShowDetail($"6.{i}")'>6.@i</a>
+                                </td>
+                                <td class="text-center">2023 - 2024</td>
+                                <td class="text-left">GVCN Lớp @i</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        @if (TotalPages > 1)
+        {
+            <div class="pagination-container">
+                <span class="pagination-info">Trang @currentPage / @TotalPages</span>
+                <div class="pagination-controls">
+                    <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => ChangePage(currentPage - 1)">‹</button>
+
+                    @for (int i = 1; i <= TotalPages; i++)
+                    {
+                        var p = i;
+                        if (p == 1 || p == TotalPages || (p >= currentPage - 1 && p <= currentPage + 1))
+                        {
+                            <button class="page-btn @(currentPage == p ? "active" : "")" @onclick="() => ChangePage(p)">@p</button>
+                        }
+                        else if (p == currentPage - 2 || p == currentPage + 2)
+                        {
+                            <span style="padding:0 5px; color:#999;">...</span>
+                        }
+                    }
+
+                    <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => ChangePage(currentPage + 1)">›</button>
+
+                    <select class="page-size-select" @onchange="OnPageSizeChanged">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private bool IsDetailView = false;
+    private string CurrentClassName = "";
+
+    // --- LOGIC PHÂN TRANG ---
+    private int currentPage = 1;
+    private int pageSize = 10;
+    private int TotalItems => IsDetailView ? 45 : 12;
+    private int TotalPages => (int)Math.Ceiling((double)TotalItems / pageSize);
+    private List<int> PagedListIndices
+    {
+        get
+        {
+            if (TotalItems == 0) return new List<int>();
+            var start = (currentPage - 1) * pageSize + 1;
+            var count = Math.Min(pageSize, TotalItems - start + 1);
+            return Enumerable.Range(start, count).ToList();
+        }
+    }
+
+    private void ChangePage(int newPage)
+    {
+        if (newPage >= 1 && newPage <= TotalPages) currentPage = newPage;
+    }
+
+    private void OnPageSizeChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int newSize))
+        {
+            pageSize = newSize;
+            currentPage = 1; 
+        }
+    }
+
+    private void ShowDetail(string className)
+    {
+        CurrentClassName = className;
+        IsDetailView = true;
+        currentPage = 1; 
+    }
+
+    private void ShowOverview()
+    {
+        IsDetailView = false;
+        currentPage = 1;
+    }
+}

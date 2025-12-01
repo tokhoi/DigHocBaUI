@@ -1,0 +1,110 @@
+﻿@page "/ky-so-mon-hoc"
+@rendermode InteractiveServer
+@using DigHocBaUI.Models
+
+<div class="page-wrapper">
+    <div class="toolbar">
+        <h2 class="page-title">Ký số môn học</h2>
+        <div class="filter-group">
+            <select class="form-select"><option>Môn Ngữ Văn</option></select>
+            <select class="form-select"><option>Khối 10</option></select>
+            <select class="form-select"><option>Lớp 10A1</option></select>
+            <div class="search-box">
+                <input type="text" placeholder="Nhập tên/ số CCCD" />
+                <button class="btn-search">
+                    <svg width="16" height="16" fill="white" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="action-right">
+        <button class="btn btn-green">Ký số</button>
+    </div>
+
+    <div class="grid-panel">
+        <table class="vnedu-table">
+            <thead>
+                <tr>
+                    <th width="40"><input type="checkbox" /></th>
+                    <th width="50">STT</th>
+                    <th>Mã định danh</th>
+                    <th class="text-start">Họ và tên</th>
+                    <th>HK1</th>
+                    <th>HK2</th>
+                    <th>Cả năm</th>
+                    <th>GVBM</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in PagedList)
+                {
+                    <tr>
+                        <td><input type="checkbox" /></td>
+                        <td>@item.STT</td>
+                        <td>@item.MaDinhDanh</td>
+                        <td class="text-start font-bold">@item.HoTen</td>
+                        <td>@item.DiemHK1</td>
+                        <td>@item.DiemHK2</td>
+                        <td>@item.DiemCaNam</td>
+                        <td>@item.NguoiKy</td>
+                        <td>
+                            <span class="status-text @(item.TrangThaiKy == "Đã ký" ? "done" : "pending")">
+                                @item.TrangThaiKy
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (TotalPages > 1)
+    {
+        <div class="pagination-container">
+            <span class="pagination-info">Trang @currentPage / @TotalPages</span>
+            <div class="pagination-controls">
+                <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => ChangePage(currentPage - 1)">‹</button>
+                @for (int i = 1; i <= TotalPages; i++)
+                {
+                    var p = i;
+                    <button class="page-btn @(currentPage == p ? "active" : "")" @onclick="() => ChangePage(p)">@p</button>
+                }
+                <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => ChangePage(currentPage + 1)">›</button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private int currentPage = 1;
+    private int pageSize = 5;
+    private List<HocBa> FullList = new();
+
+    private int TotalItems => FullList.Count;
+    private int TotalPages => (int)Math.Ceiling((double)TotalItems / pageSize);
+    private List<HocBa> PagedList => FullList.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+    private void ChangePage(int newPage) { if (newPage >= 1 && newPage <= TotalPages) currentPage = newPage; }
+
+    protected override void OnInitialized()
+    {
+        for (int i = 1; i <= 15; i++)
+        {
+            FullList.Add(new HocBa
+            {
+                STT = i,
+                MaDinhDanh = $"0265..{i}",
+                HoTen = $"Học sinh {i}",
+                DiemHK1 = 8.5,
+                DiemHK2 = 9.0,
+                DiemCaNam = 8.8,
+                NguoiKy = "Lâm Hoàng Phúc",
+                TrangThaiKy = i % 2 == 0 ? "Đã ký" : "Đợi ký"
+            });
+        }
+    }
+}

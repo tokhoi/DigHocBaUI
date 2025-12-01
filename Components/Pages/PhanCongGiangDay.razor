@@ -1,0 +1,165 @@
+﻿@page "/phan-cong-giang-day"
+@rendermode InteractiveServer
+@using DigHocBaUI.Models
+
+<div class="page-wrapper">
+    <div class="tabs">
+        <div class="tab-item @(activeTab == 1 ? "active" : "")" @onclick="() => SwitchTab(1)">Phân công GVCN</div>
+        <div class="tab-item @(activeTab == 2 ? "active" : "")" @onclick="() => SwitchTab(2)">Phân công giảng dạy</div>
+        <div class="tab-item @(activeTab == 3 ? "active" : "")" @onclick="() => SwitchTab(3)">Phân công quản lý</div>
+    </div>
+
+    <div class="toolbar">
+        <h2 class="title">@GetTabTitle()</h2>
+        <div class="actions">
+            @if (activeTab != 3)
+            {
+                <select class="form-select"><option>Chọn môn</option></select>
+                <select class="form-select"><option>Chọn Khối</option></select>
+                <select class="form-select"><option>Chọn Lớp</option></select>
+            }
+            <div class="search-box">
+                <input type="text" placeholder="Nhập tên/ số CCCD" />
+                <button class="btn-search">
+                    <svg width="16" height="16" fill="white" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-panel">
+        <table class="vnedu-table">
+            <thead>
+                <tr>
+                    <th width="40"><input type="checkbox" /></th>
+                    <th width="50">STT</th>
+                    <th>Mã định danh</th>
+                    <th class="text-start">Họ và tên</th>
+                    @if (activeTab == 3)
+                    {
+                        <th>Chức vụ</th>
+                    }
+                    else
+                    {
+                        <th>Lớp</th>
+                        <th>Học kỳ</th>
+ }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in PagedList)
+                {
+                    <tr>
+                        <td><input type="checkbox" /></td>
+                        <td>@item.STT</td>
+                        <td>@item.MaDinhDanh</td>
+                        <td class="text-start">@item.HoTen</td>
+                        @if (activeTab == 3)
+                        {
+                            <td>@item.ChucVu</td>
+                        }
+                        else
+                        {
+                            <td>@item.Lop</td>
+                            <td>@item.HocKy</td>
+     }
+                    </tr>
+                }
+                @if (!PagedList.Any())
+                {
+                    <tr>
+                        <td colspan="6" style="padding: 20px; color: #888;">Không có dữ liệu</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (TotalPages > 1)
+    {
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Hiển thị @((currentPage - 1) * pageSize + 1) - @Math.Min(currentPage * pageSize, TotalItems) trên tổng số @TotalItems dòng
+            </div>
+            <div class="pagination-controls">
+                <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => ChangePage(currentPage - 1)">‹</button>
+
+                @for (int i = 1; i <= TotalPages; i++)
+                {
+                    var pageNumber = i; // Biến cục bộ để closure hoạt động đúng
+                                        <button class="page-btn @(currentPage == pageNumber ? "active" : "")"
+                                                @onclick="() => ChangePage(pageNumber)">
+                                            @pageNumber
+                                        </button>
+                }
+
+                <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => ChangePage(currentPage + 1)">›</button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private int activeTab = 1;
+
+    private int currentPage = 1;
+    private int pageSize = 5; 
+    private int TotalItems => GetFullData().Count;
+
+    private int TotalPages => (int)Math.Ceiling((double)TotalItems / pageSize);
+
+    private List<PhanCong> PagedList => GetFullData()
+                                        .Skip((currentPage - 1) * pageSize)
+                                        .Take(pageSize)
+                                        .ToList();
+
+    private void ChangePage(int newPage)
+    {
+        if (newPage >= 1 && newPage <= TotalPages)
+        {
+            currentPage = newPage;
+        }
+    }
+
+    private void SwitchTab(int tabIndex)
+    {
+        activeTab = tabIndex;
+        currentPage = 1; 
+    }
+
+    protected override void OnInitialized()
+    {
+        for (int i = 0; i < 15; i++)
+        {
+            ListGiaoVien.Add(new PhanCong { STT = i + 3, MaDinhDanh = "0265489...", HoTen = $"Giáo viên {i}", Lop = "1A1", HocKy = "Cả năm" });
+        }
+    }
+
+    private string GetTabTitle() => activeTab switch
+    {
+        1 => "Phân công GVCN",
+        2 => "Phân công giảng dạy",
+        3 => "Phân công quản lý",
+        _ => ""
+    };
+
+    private List<PhanCong> ListGiaoVien = new List<PhanCong> {
+        new PhanCong { STT = 1, MaDinhDanh = "0265489156155", HoTen = "Ngô Võ Hồng Anh", Lop = "1A1", HocKy = "Cả năm" },
+        new PhanCong { STT = 2, MaDinhDanh = "0265489156155", HoTen = "Võ Thị Trà My", Lop = "1A2", HocKy = "Cả năm" }
+    };
+    private List<PhanCong> ListGiangDay = new List<PhanCong> {
+        new PhanCong { STT = 1, MaDinhDanh = "0265489...", HoTen = "Ngô Võ Hồng Anh", Lop = "1A1 (Ngữ Văn)", HocKy = "HK1" }
+    };
+    private List<PhanCong> ListQuanLy = new List<PhanCong> {
+        new PhanCong { STT = 1, MaDinhDanh = "0265489...", HoTen = "Ngô Võ Hồng Anh", ChucVu = "Hiệu trưởng" }
+    };
+
+    private List<PhanCong> GetFullData()
+    {
+        if (activeTab == 1) return ListGiaoVien;
+        if (activeTab == 2) return ListGiangDay;
+        return ListQuanLy;
+    }
+}

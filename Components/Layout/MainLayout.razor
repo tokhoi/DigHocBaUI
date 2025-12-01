@@ -1,0 +1,102 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Routing
+
+<div class="app-container">
+
+    <aside class="sidebar @(IsSidebarOpen ? "show" : "")">
+        <div class="sidebar-header">
+            <div class="logo-circle"></div>
+            <button class="close-sidebar-btn" @onclick="ToggleSidebar">✕</button>
+        </div>
+
+        <nav class="nav-menu">
+            <div class="nav-item">Dashboard</div>
+            <div class="nav-item has-arrow">Quản lý trường học</div>
+            <div class="nav-item has-arrow">Quản lý đào tạo</div>
+
+            <div class="nav-group-active">
+                <div class="nav-item parent-active">
+                    Quản lý thông báo
+                </div>
+                <div class="nav-item highlight-parent">
+                    Học bạ số <span class="arrow-down">▼</span>
+                </div>
+
+                <!-- MENU CON -->
+                <div class="sub-menu">
+                    <NavLink class="sub-item" href="dashboard" Match="NavLinkMatch.All" @onclick="CloseSidebarOnMobile">
+                        Dashboard
+                    </NavLink>
+                    
+                    <NavLink class="sub-item" href="quan-ly-dong-bo" Match="NavLinkMatch.All" @onclick="CloseSidebarOnMobile">
+                        Đồng bộ                   
+                    </NavLink>
+
+                    <NavLink class="sub-item" href="dang-ky-chu-ky-so" Match="NavLinkMatch.All" @onclick="CloseSidebarOnMobile">
+                        Đăng ký chữ ký số
+                    </NavLink>
+
+                    <NavLink class="sub-item" href="phan-cong-giang-day" @onclick="CloseSidebarOnMobile">
+                        Phân công giảng dạy
+                    </NavLink>
+
+                    <NavLink class="sub-item" href="khoi-tao-hoc-ba" @onclick="CloseSidebarOnMobile">
+                        Khởi tạo học bạ
+                    </NavLink>
+
+                    <NavLink class="sub-item" href="ky-so-mon-hoc" @onclick="CloseSidebarOnMobile">
+                        Ký số môn học
+                    </NavLink>
+
+                    <NavLink class="sub-item" href="phat-hanh-hoc-ba" @onclick="CloseSidebarOnMobile">
+                        Phát hành học bạ
+                    </NavLink>
+
+                    <NavLink class="sub-item" href="danh-gia-tong-hop" @onclick="CloseSidebarOnMobile">
+                        Đánh giá và tổng hợp
+                    </NavLink>
+                </div>
+            </div>
+
+            <div class="nav-item has-arrow">Học trực tuyến LMS</div>
+            <div class="nav-item has-arrow">Thư viện số</div>
+        </nav>
+    </aside>
+
+    @if (IsSidebarOpen)
+    {
+        <div class="sidebar-overlay" @onclick="ToggleSidebar"></div>
+    }
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="top-left">
+                <button class="menu-btn" @onclick="ToggleSidebar">☰</button>
+                <span class="school-name">Chuyên Lương Thế Vinh</span>
+            </div>
+            <div class="top-right">
+                <span class="username">admin</span>
+                <div class="user-avatar">👤</div>
+                <span class="year-select">2025 - 2025 ▼</span>
+            </div>
+        </header>
+
+        <div class="content-body">
+            @Body
+        </div>
+    </main>
+</div>
+
+@code {
+    private bool IsSidebarOpen = false;
+
+    private void ToggleSidebar()
+    {
+        IsSidebarOpen = !IsSidebarOpen;
+    }
+
+    private void CloseSidebarOnMobile()
+    {
+        IsSidebarOpen = false;
+    }
+}

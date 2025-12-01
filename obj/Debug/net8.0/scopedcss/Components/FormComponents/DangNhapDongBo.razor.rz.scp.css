@@ -1,0 +1,62 @@
+.modal-overlay[b-k333v01pqk] {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 3000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn-b-k333v01pqk 0.2s;
+}
+
+.login-box[b-k333v01pqk] {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.login-header[b-k333v01pqk] {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+    .login-header h3[b-k333v01pqk] {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #333;
+    }
+
+.btn-close-x[b-k333v01pqk] {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+}
+
+    .btn-close-x:hover[b-k333v01pqk] {
+        color: #333;
+    }
+
+.page-wrapper[b-k333v01pqk] {
+    max-width: 1400px;
+    margin: 0 auto;
+    animation: fadeIn-b-k333v01pqk 0.4s ease-out;
+}
+
+@keyframes fadeIn-b-k333v01pqk {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

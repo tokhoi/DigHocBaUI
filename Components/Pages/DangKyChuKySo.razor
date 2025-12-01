@@ -1,0 +1,157 @@
+﻿@page "/dang-ky-chu-ky-so"
+@rendermode InteractiveServer
+@using DigHocBaUI.Models
+@using DigHocBaUI.Components.FormComponents
+
+<div class="page-wrapper">
+    <div class="toolbar">
+        <h2 class="page-title">Đăng ký chữ ký số</h2>
+        <div class="actions">
+            <button class="btn btn-create" @onclick="OpenCreateModal">Tạo mới</button>
+
+            <button class="btn btn-delete">Xóa</button>
+            <div class="search-box">
+                <input type="text" placeholder="Nhập tên/ số CCCD" />
+                <button class="btn-search">🔍</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-panel">
+        <table class="vnedu-table">
+            <thead>
+                <tr>
+                    <th width="40"><input type="checkbox" /></th>
+                    <th width="150">Thao tác</th>
+                    <th width="50">STT</th>
+                    <th class="text-start">Họ và tên</th>
+                    <th>CCCD/ CMND</th>
+                    <th>Nhóm quyền</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in PagedList)
+                {
+                    <tr>
+                        <td><input type="checkbox" /></td>
+                        <td>
+                            <button class="btn-edit" @onclick="() => OpenEditModal(item)">
+                                Chỉnh sửa
+                            </button>
+                        </td>
+                        <td>@item.STT</td>
+                        <td class="text-start font-bold">@item.HoTen</td>
+                        <td>@item.CCCD</td>
+                        <td>@item.NhomQuyen</td>
+                        <td>
+                            <span class="@(item.DaDangKy ? "status-text done" : "status-text pending")">
+                                @(item.DaDangKy ? "Đã đăng ký CKS" : "Chưa đăng ký CKS")
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (TotalPages > 1)
+    {
+        <div class="pagination-container">
+            <span class="pagination-info">Trang @currentPage / @TotalPages</span>
+            <div class="pagination-controls">
+                <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => ChangePage(currentPage - 1)">‹</button>
+                @for (int i = 1; i <= TotalPages; i++)
+                {
+                    var p = i;
+                    <button class="page-btn @(currentPage == p ? "active" : "")" @onclick="() => ChangePage(p)">@p</button>
+                }
+                <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => ChangePage(currentPage + 1)">›</button>
+            </div>
+        </div>
+    }
+    
+    <EditDangKyChuKySo IsVisible="isShowModal"
+                       UserData="editingUser"
+                       Title="@modalTitle"
+                       OnClose="HandleModalClose" />
+</div>
+
+@code {
+    private int currentPage = 1;
+    private int pageSize = 5;
+    private List<GiaoVien> FullList = new();
+    private int TotalItems => FullList.Count;
+    private int TotalPages => (int)Math.Ceiling((double)TotalItems / pageSize);
+    private List<GiaoVien> PagedList => FullList.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+    private void ChangePage(int newPage) { if (newPage >= 1 && newPage <= TotalPages) currentPage = newPage; }
+
+    private bool isShowModal = false;
+    private GiaoVien editingUser = new();
+
+    private string modalTitle = "Thông tin người dùng";
+    private bool isEditMode = false;
+
+    private void OpenCreateModal()
+    {
+        editingUser = new GiaoVien();
+
+        modalTitle = "Thêm mới người dùng";
+        isEditMode = false;
+
+        isShowModal = true;
+    }
+
+    private void OpenEditModal(GiaoVien user)
+    {
+        editingUser = new GiaoVien
+        {
+            STT = user.STT,
+            HoTen = user.HoTen,
+            CCCD = user.CCCD,
+            NhomQuyen = user.NhomQuyen,
+            DaDangKy = user.DaDangKy
+        };
+
+        modalTitle = "Cập nhật thông tin";
+        isEditMode = true;
+
+        isShowModal = true;
+    }
+
+    private void HandleModalClose(bool isSaved)
+    {
+        if (isSaved)
+        {
+            if (isEditMode)
+            {
+                var original = FullList.FirstOrDefault(x => x.STT == editingUser.STT);
+                if (original != null)
+                {
+                    original.HoTen = editingUser.HoTen;
+                    original.CCCD = editingUser.CCCD;
+                }
+            }
+            else
+            {
+
+                int newId = FullList.Any() ? FullList.Max(x => x.STT) + 1 : 1;
+                editingUser.STT = newId;
+
+                editingUser.NhomQuyen = "Giáo viên bộ môn";
+                editingUser.DaDangKy = false;
+
+                FullList.Insert(0, editingUser);
+            }
+        }
+        isShowModal = false;
+    }
+
+    protected override void OnInitialized()
+    {
+        for (int i = 1; i <= 20; i++)
+        {
+            FullList.Add(new GiaoVien { STT = i, HoTen = $"Giáo viên {i}", CCCD = $"0265..{i}", NhomQuyen = "GVBM", DaDangKy = i % 2 == 0 });
+        }
+    }
+}
