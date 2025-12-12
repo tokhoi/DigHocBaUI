@@ -1,0 +1,198 @@
+﻿@page "/sdb-phong-chuc-nang"
+@rendermode InteractiveServer
+
+<div class="page-wrapper">
+    <!-- Header -->
+    <div class="top-header">
+        <div>
+            <h2 class="page-heading">Quản Lý Phòng Chức Năng</h2>
+            <div class="breadcrumb">
+                <span class="back-link">Cơ sở vật chất</span>
+                <span class="separator">/</span>
+                <span class="current-class">Danh sách phòng học</span>
+            </div>
+        </div>
+        <div class="header-controls">
+            <button class="btn-settings primary" @onclick="OpenModal">
+                <i class="bi bi-plus-lg"></i> + Thêm phòng
+            </button>
+        </div>
+    </div>
+
+    <!-- Data Grid -->
+    <div class="animate-fade-in">
+        <div class="grid-panel">
+            <!-- Toolbar lọc nhanh -->
+            <div class="toolbar-simple">
+                <select class="filter-select">
+                    <option value="">Tất cả loại phòng</option>
+                    <option value="LAB">Phòng Lab Tin học</option>
+                    <option value="HOA">Phòng Hóa Sinh</option>
+                    <option value="AMNHAC">Phòng Âm Nhạc</option>
+                </select>
+                <select class="filter-select">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="READY">Sẵn sàng</option>
+                    <option value="BUSY">Đang sử dụng</option>
+                    <option value="MAINTAIN">Đang bảo trì</option>
+                </select>
+            </div>
+
+            <div class="table-responsive">
+                <table class="vnedu-table">
+                    <thead>
+                        <tr class="header-blue">
+                            <th class="text-center" width="60">STT</th>
+                            <th class="text-left">Mã Phòng</th>
+                            <th class="text-left">Tên Phòng</th>
+                            <th class="text-center">Loại Phòng</th>
+                            <th class="text-center">Sức Chứa</th>
+                            <th class="text-center">Trạng Thái</th>
+                            <th class="text-left">Ghi Chú</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < ListPhong.Count; i++)
+                        {
+                            var item = ListPhong[i];
+                            <tr>
+                                <td class="text-center">@(i + 1)</td>
+                                <td class="font-bold text-primary">@item.MaPhong</td>
+                                <td class="font-bold">@item.TenPhong</td>
+                                <td class="text-center">
+                                    <span class="category-tag">@GetLoaiPhongName(item.LoaiPhong)</span>
+                                </td>
+                                <td class="text-center">@item.SucChua</td>
+                                <td class="text-center">
+                                    @if (item.TrangThai == "READY")
+                                    {
+                                        <span class="status-badge success">Sẵn sàng</span>
+                                    }
+                                    else if (item.TrangThai == "BUSY")
+                                    {
+                                        <span class="status-badge warning">Đang học</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge error">Bảo trì</span>
+                                    }
+                                </td>
+                                <td>@item.GhiChu</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ADD ROOM -->
+    @if (IsShowModal)
+    {
+        <div class="modal-overlay">
+            <div class="modal-card animate-scale-in">
+                <div class="modal-header">
+                    <h3 class="modal-title">Thêm phòng chức năng mới</h3>
+                    <button class="btn-close-modal" @onclick="CloseModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label class="form-label">Mã phòng <span class="required">*</span></label>
+                            <input type="text" class="custom-input uppercase-input"
+                                   @bind="NewItem.MaPhong" placeholder="VD: LAB01" autofocus />
+                        </div>
+                        <div class="form-group half-width">
+                            <label class="form-label">Loại phòng</label>
+                            <select class="custom-input" @bind="NewItem.LoaiPhong">
+                                <option value="LAB">Phòng Tin học</option>
+                                <option value="HOA">Phòng Hóa/Sinh</option>
+                                <option value="LY">Phòng Vật Lý</option>
+                                <option value="AMNHAC">Phòng Âm Nhạc</option>
+                                <option value="HOITRUONG">Hội Trường</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tên phòng hiển thị <span class="required">*</span></label>
+                        <input type="text" class="custom-input" @bind="NewItem.TenPhong" placeholder="VD: Phòng Lab 1 (Tầng 2)..." />
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label class="form-label">Sức chứa (người)</label>
+                            <input type="number" class="custom-input text-center" @bind="NewItem.SucChua" min="0" />
+                        </div>
+                        <div class="form-group half-width">
+                            <label class="form-label">Trạng thái hiện tại</label>
+                            <select class="custom-input" @bind="NewItem.TrangThai">
+                                <option value="READY">Sẵn sàng sử dụng</option>
+                                <option value="MAINTAIN">Đang bảo trì/Sửa chữa</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Ghi chú / Thiết bị đi kèm</label>
+                        <textarea class="custom-input" rows="2" @bind="NewItem.GhiChu" placeholder="VD: Có máy chiếu, 40 máy tính..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-modal-cancel" @onclick="CloseModal">Hủy bỏ</button>
+                    <button class="btn-modal-save" @onclick="SaveData">Lưu thông tin</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    public class PhongDTO
+    {
+        public string MaPhong { get; set; } = "";
+        public string TenPhong { get; set; } = "";
+        public string LoaiPhong { get; set; } = "LAB"; // Map to dm_loaiphongchucnang
+        public int SucChua { get; set; } = 40;
+        public string TrangThai { get; set; } = "READY"; // Map to dm_tinhtrangphongchucnang
+        public string GhiChu { get; set; } = "";
+    }
+
+    private List<PhongDTO> ListPhong = new List<PhongDTO>();
+    private bool IsShowModal = false;
+    private PhongDTO NewItem = new PhongDTO();
+
+    protected override void OnInitialized()
+    {
+        // Mock data
+        ListPhong = new List<PhongDTO>
+        {
+            new PhongDTO { MaPhong = "LAB01", TenPhong = "Phòng Tin học 1", LoaiPhong = "LAB", SucChua = 45, TrangThai = "READY", GhiChu = "Máy lạnh hoạt động tốt" },
+            new PhongDTO { MaPhong = "HOA01", TenPhong = "Phòng Thí nghiệm Hóa", LoaiPhong = "HOA", SucChua = 40, TrangThai = "BUSY", GhiChu = "Đang có lớp 10A1 học" },
+            new PhongDTO { MaPhong = "AV01", TenPhong = "Phòng Nghe nhìn", LoaiPhong = "LAB", SucChua = 30, TrangThai = "MAINTAIN", GhiChu = "Sửa hệ thống âm thanh" },
+        };
+    }
+
+    private string GetLoaiPhongName(string code)
+    {
+        return code switch
+        {
+            "LAB" => "Tin học",
+            "HOA" => "Hóa/Sinh",
+            "LY" => "Vật lý",
+            "AMNHAC" => "Âm nhạc",
+            _ => code
+        };
+    }
+
+    private void OpenModal() { NewItem = new PhongDTO(); IsShowModal = true; }
+    private void CloseModal() { IsShowModal = false; }
+    private void SaveData()
+    {
+        if (!string.IsNullOrEmpty(NewItem.MaPhong) && !string.IsNullOrEmpty(NewItem.TenPhong))
+        {
+            ListPhong.Add(NewItem);
+            CloseModal();
+        }
+    }
+}

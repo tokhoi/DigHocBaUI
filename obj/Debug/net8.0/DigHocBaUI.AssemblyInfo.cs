@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DigHocBaUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+79d8d61892792fa369b7ec0dd4b43b58f301446b")]
 [assembly: System.Reflection.AssemblyProductAttribute("DigHocBaUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DigHocBaUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

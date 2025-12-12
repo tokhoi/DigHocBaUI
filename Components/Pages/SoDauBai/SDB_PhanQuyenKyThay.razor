@@ -1,0 +1,131 @@
+﻿@page "/sdb-phan-quyen"
+@rendermode InteractiveServer
+
+<div class="page-wrapper animate-fade-in">
+    <div class="top-header">
+        <div>
+            <h2 class="page-heading">Phân Quyền Ký Sổ</h2>
+            <div class="breadcrumb">
+                <span class="back-link">Hệ thống</span> / <span class="current-class">Cấu hình ủy quyền</span>
+            </div>
+        </div>
+        <div class="header-controls">
+            <button class="btn-settings primary" @onclick="OpenModal">
+                <i class="bi bi-person-plus-fill"></i> Thêm ủy quyền
+            </button>
+        </div>
+    </div>
+
+    <div class="grid-panel">
+        <div class="table-responsive">
+            <table class="vnedu-table">
+                <thead>
+                    <tr class="header-blue">
+                        <th class="text-center" width="50">STT</th>
+                        <th>Giáo viên được ủy quyền</th>
+                        <th>Ký thay cho (Lớp)</th>
+                        <th>Môn học</th>
+                        <th>Người phân quyền</th>
+                        <th class="text-center">Loại quyền</th>
+                        <th class="text-center" width="100">Hủy quyền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in PagedList)
+                    {
+                        <tr>
+                            <td class="text-center">@item.Id</td>
+                            <td class="font-bold text-primary">@item.Teacher</td>
+                            <td><span class="tag-badge primary">@item.Class</span></td>
+                            <td>@item.Subject</td>
+                            <td>@item.Assigner</td>
+                            <td class="text-center">
+                                <span class="tag-badge warning">@item.Type</span>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn-icon" style="color: #ef4444;" title="Xóa">🗑️</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-container">
+            <div class="pagination-info">Trang @currentPage / @TotalPages</div>
+            <div class="pagination-buttons">
+                <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => currentPage--">‹</button>
+                <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => currentPage++">›</button>
+            </div>
+        </div>
+    </div>
+
+    @if (IsShowModal)
+    {
+        <div class="modal-overlay">
+            <div class="modal-card animate-scale-in">
+                <div class="modal-header">
+                    <h3 class="modal-title">Thêm phân quyền mới</h3>
+                    <button class="btn-close-modal" @onclick="CloseModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Giáo viên được ủy quyền</label>
+                        <select class="custom-input"><option>Chọn giáo viên...</option></select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label class="form-label">Lớp</label>
+                            <select class="custom-input"><option>10A1</option><option>11B2</option></select>
+                        </div>
+                        <div class="form-group half-width">
+                            <label class="form-label">Môn</label>
+                            <select class="custom-input"><option>Toán</option><option>Văn</option></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Loại quyền</label>
+                        <select class="custom-input">
+                            <option>Ký thay Sổ đầu bài</option>
+                            <option>Ký thay Học bạ</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-modal-cancel" @onclick="CloseModal">Hủy</button>
+                    <button class="btn-modal-save" @onclick="CloseModal">Lưu</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private bool IsShowModal = false;
+    private int currentPage = 1;
+    private int pageSize = 10;
+
+    public class PermItem { public int Id; public string Teacher; public string Class; public string Subject; public string Assigner; public string Type; }
+    private List<PermItem> AllItems = new List<PermItem>();
+
+    protected override void OnInitialized()
+    {
+        for (int i = 1; i <= 15; i++)
+        {
+            AllItems.Add(new PermItem
+            {
+                Id = i,
+                Teacher = $"Nguyễn Văn {i} (Tổ Trưởng)",
+                Class = $"10A{i % 5 + 1}",
+                Subject = "Toán",
+                Assigner = "Admin",
+                Type = "Ký thay GVCN"
+            });
+        }
+    }
+
+    private List<PermItem> PagedList => AllItems.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+    private int TotalPages => (int)Math.Ceiling((double)AllItems.Count / pageSize);
+    private void OpenModal() => IsShowModal = true;
+    private void CloseModal() => IsShowModal = false;
+}

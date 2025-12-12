@@ -1,0 +1,149 @@
+﻿@page "/sdb-to-chuc-nhan-su"
+@rendermode InteractiveServer
+
+<div class="page-wrapper animate-fade-in">
+    <div class="top-header">
+        <div>
+            <h2 class="page-heading">Tổ Chức & Nhân Sự</h2>
+            <div class="breadcrumb">
+                <span class="back-link">Hệ thống</span> / <span class="current-class">Cấu hình chuyên môn</span>
+            </div>
+        </div>
+        <div class="header-controls">
+            @if (activeTab == 1)
+            {
+                <button class="btn-settings primary" @onclick="OpenModal">
+                    <i class="bi bi-people-fill"></i> Thêm Tổ mới
+                </button>
+            }
+        </div>
+    </div>
+
+    <div class="grid-panel">
+        <div class="tabs-header">
+            <div class="tab-item @(activeTab == 1 ? "active" : "")" @onclick="() => activeTab = 1">
+                Danh sách Tổ bộ môn
+            </div>
+            <div class="tab-item @(activeTab == 2 ? "active" : "")" @onclick="() => activeTab = 2">
+                Ban giám hiệu (Chuyên môn)
+            </div>
+        </div>
+
+        @if (activeTab == 1)
+        {
+            <div class="table-responsive">
+                <table class="vnedu-table">
+                    <thead>
+                        <tr class="header-blue">
+                            <th class="text-center" width="60">STT</th>
+                            <th>Mã Tổ</th>
+                            <th>Tên Tổ</th>
+                            <th>Tổ Trưởng</th>
+                            <th>Tổ Phó</th>
+                            <th class="text-center" width="100">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in PagedList)
+                        {
+                            <tr>
+                                <td class="text-center">@item.Id</td>
+                                <td><span class="tag-badge primary">@item.Code</span></td>
+                                <td class="font-bold">@item.Name</td>
+                                <td>@item.Leader</td>
+                                <td>@item.Deputy</td>
+                                <td class="text-center"><button class="btn-icon">✎</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <div class="pagination-info">Trang @currentPage / @TotalPages</div>
+                <div class="pagination-buttons">
+                    <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => currentPage--">‹</button>
+                    <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => currentPage++">›</button>
+                </div>
+            </div>
+        }
+
+        @if (activeTab == 2)
+        {
+            <div class="p-4" style="max-width: 600px;">
+                <div class="schedule-card p-4">
+                    <h4 class="mb-3 text-primary font-bold">Cấu hình Ban Giám Hiệu</h4>
+                    <div class="form-group">
+                        <label class="form-label">Hiệu phó 1 (Phụ trách KHTN)</label>
+                        <input type="text" class="custom-input" value="Nguyễn Văn HP1" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Hiệu phó 2 (Phụ trách KHXH)</label>
+                        <input type="text" class="custom-input" value="Trần Thị HP2" />
+                    </div>
+                    <button class="btn-settings primary mt-2">Lưu cấu hình</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (IsShowModal)
+    {
+        <div class="modal-overlay">
+            <div class="modal-card animate-scale-in">
+                <div class="modal-header">
+                    <h3 class="modal-title">Thông tin Tổ Bộ Môn</h3>
+                    <button class="btn-close-modal" @onclick="CloseModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Mã tổ</label>
+                        <input type="text" class="custom-input" placeholder="VD: TOAN" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tên tổ</label>
+                        <input type="text" class="custom-input" placeholder="VD: Tổ Toán - Tin" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label class="form-label">Tổ trưởng</label>
+                            <select class="custom-input"><option>Chọn giáo viên...</option></select>
+                        </div>
+                        <div class="form-group half-width">
+                            <label class="form-label">Tổ phó</label>
+                            <select class="custom-input"><option>Chọn giáo viên...</option></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-modal-cancel" @onclick="CloseModal">Hủy</button>
+                    <button class="btn-modal-save" @onclick="CloseModal">Lưu</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private int activeTab = 1;
+    private bool IsShowModal = false;
+    private int currentPage = 1;
+    private int pageSize = 10;
+
+    public class DeptItem { public int Id; public string Code; public string Name; public string Leader; public string Deputy; }
+    private List<DeptItem> AllItems = new List<DeptItem>();
+
+    protected override void OnInitialized()
+    {
+        AllItems = new List<DeptItem> {
+            new DeptItem { Id = 1, Code = "TOAN", Name = "Tổ Toán", Leader = "Nguyễn Văn A", Deputy = "Trần Thị B" },
+            new DeptItem { Id = 2, Code = "VAN", Name = "Tổ Ngữ Văn", Leader = "Lê Văn C", Deputy = "" },
+            new DeptItem { Id = 3, Code = "ANH", Name = "Tổ Ngoại Ngữ", Leader = "Phạm Thị D", Deputy = "Ngô Văn E" }
+        };
+    }
+
+    private List<DeptItem> PagedList => AllItems.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+    private int TotalPages => (int)Math.Ceiling((double)AllItems.Count / pageSize);
+    private void OpenModal() => IsShowModal = true;
+    private void CloseModal() => IsShowModal = false;
+}

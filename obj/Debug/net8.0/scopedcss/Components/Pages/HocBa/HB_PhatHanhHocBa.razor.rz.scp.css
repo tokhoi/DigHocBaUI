@@ -1,11 +1,11 @@
 /* --- PAGE WRAPPER --- */
-.page-wrapper[b-62mwk8gt23] {
+.page-wrapper[b-s6e8470cqy] {
     max-width: 1400px;
     margin: 0 auto;
-    animation: fadeIn-b-62mwk8gt23 0.4s ease-out; 
+    animation: fadeIn-b-s6e8470cqy 0.4s ease-out; 
 }
 
-@keyframes fadeIn-b-62mwk8gt23 {
+@keyframes fadeIn-b-s6e8470cqy {
     from {
         opacity: 0;
         transform: translateY(10px);
@@ -18,14 +18,14 @@
 }
 
 /* --- TABS --- */
-.tabs[b-62mwk8gt23] {
+.tabs[b-s6e8470cqy] {
     display: flex;
     gap: 20px;
     margin-bottom: 25px;
     border-bottom: 2px solid #e5e7eb;
 }
 
-.tab-item[b-62mwk8gt23] {
+.tab-item[b-s6e8470cqy] {
     padding: 12px 5px;
     cursor: pointer;
     font-size: 15px;
@@ -35,16 +35,16 @@
     transition: 0.3s;
 }
 
-    .tab-item:hover[b-62mwk8gt23] {
+    .tab-item:hover[b-s6e8470cqy] {
         color: #003380;
     }
 
-    .tab-item.active[b-62mwk8gt23] {
+    .tab-item.active[b-s6e8470cqy] {
         color: #003380;
         font-weight: 700;
     }
         /* Đường gạch chân chạy active */
-        .tab-item.active[b-62mwk8gt23]::after {
+        .tab-item.active[b-s6e8470cqy]::after {
             content: '';
             position: absolute;
             bottom: -2px;
@@ -56,14 +56,14 @@
         }
 
 /* --- TOOLBAR --- */
-.toolbar[b-62mwk8gt23] {
+.toolbar[b-s6e8470cqy] {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.title[b-62mwk8gt23] {
+.title[b-s6e8470cqy] {
     font-size: 24px;
     font-weight: 800;
     color: #111827;
@@ -71,7 +71,7 @@
 }
 
 /* Nút bấm hiện đại */
-.btn-blue[b-62mwk8gt23] {
+.btn-blue[b-s6e8470cqy] {
     background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
     color: white;
     padding: 10px 24px;
@@ -83,13 +83,13 @@
     cursor: pointer;
 }
 
-    .btn-blue:hover[b-62mwk8gt23] {
+    .btn-blue:hover[b-s6e8470cqy] {
         transform: translateY(-2px); /* Nổi lên khi hover */
         box-shadow: 0 6px 12px rgba(0, 123, 255, 0.35);
     }
 
 /* --- BẢNG DỮ LIỆU (GRID PANEL) --- */
-.grid-panel[b-62mwk8gt23] {
+.grid-panel[b-s6e8470cqy] {
     background: white;
     border-radius: 16px; /* Bo tròn khung bảng */
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); /* Bóng sâu, mượt */
@@ -97,7 +97,7 @@
     border: 1px solid #f3f4f6;
 }
 
-.vnedu-table[b-62mwk8gt23] {
+.vnedu-table[b-s6e8470cqy] {
     width: 100%;
     border-collapse: separate; /* Quan trọng để border-spacing hoạt động nếu cần */
     border-spacing: 0;
@@ -105,7 +105,7 @@
 }
 
     /* Header Bảng */
-    .vnedu-table th[b-62mwk8gt23] {
+    .vnedu-table th[b-s6e8470cqy] {
         background-color: #f9fafb;
         padding: 18px 15px;
         font-size: 13px;
@@ -117,7 +117,7 @@
     }
 
     /* Dòng dữ liệu */
-    .vnedu-table td[b-62mwk8gt23] {
+    .vnedu-table td[b-s6e8470cqy] {
         padding: 16px 15px;
         border-bottom: 1px solid #f3f4f6;
         color: #374151;
@@ -126,24 +126,24 @@
     }
 
     /* Hiệu ứng hover dòng */
-    .vnedu-table tbody tr[b-62mwk8gt23] {
+    .vnedu-table tbody tr[b-s6e8470cqy] {
         transition: background-color 0.2s;
     }
 
-        .vnedu-table tbody tr:hover[b-62mwk8gt23] {
+        .vnedu-table tbody tr:hover[b-s6e8470cqy] {
             background-color: #f0f9ff;
         }
     /* Màu xanh rất nhạt khi hover */
 
     /* Cột checkbox và STT căn giữa */
-    .vnedu-table th:first-child[b-62mwk8gt23], .vnedu-table td:first-child[b-62mwk8gt23],
-    .vnedu-table th:nth-child(2)[b-62mwk8gt23], .vnedu-table td:nth-child(2)[b-62mwk8gt23] {
+    .vnedu-table th:first-child[b-s6e8470cqy], .vnedu-table td:first-child[b-s6e8470cqy],
+    .vnedu-table th:nth-child(2)[b-s6e8470cqy], .vnedu-table td:nth-child(2)[b-s6e8470cqy] {
         text-align: center;
     }
 
 /* --- BADGES (NHÃN MÀU) --- */
 /* Style chung cho badges */
-.badge[b-62mwk8gt23] {
+.badge[b-s6e8470cqy] {
     display: inline-flex;
     align-items: center;
     padding: 6px 12px;
@@ -156,32 +156,32 @@
 }
 
 /* Màu sắc Pastel đẹp mắt */
-.badge-cyan[b-62mwk8gt23] {
+.badge-cyan[b-s6e8470cqy] {
     background-color: #e0f2fe;
     color: #0284c7;
     border: 1px solid #bae6fd;
 }
 
-.badge-yellow[b-62mwk8gt23] {
+.badge-yellow[b-s6e8470cqy] {
     background-color: #fef9c3;
     color: #ca8a04;
     border: 1px solid #fde047;
 }
 
-.badge-green[b-62mwk8gt23] {
+.badge-green[b-s6e8470cqy] {
     background-color: #dcfce7;
     color: #16a34a;
     border: 1px solid #bbf7d0;
 }
 
-.badge-purple[b-62mwk8gt23] {
+.badge-purple[b-s6e8470cqy] {
     background-color: #f3e8ff;
     color: #9333ea;
     border: 1px solid #e9d5ff;
 }
 
 /* Căn chỉnh cột badges */
-.badges-cell[b-62mwk8gt23] {
+.badges-cell[b-s6e8470cqy] {
     display: flex;
     flex-wrap: wrap; /* Nếu màn hình nhỏ quá thì tự xuống dòng */
     align-items: center;

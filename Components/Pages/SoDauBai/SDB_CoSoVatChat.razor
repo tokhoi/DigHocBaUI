@@ -1,0 +1,161 @@
+﻿@page "/sdb-co-so-vat-chat"
+@rendermode InteractiveServer
+
+<div class="page-wrapper animate-fade-in">
+    <div class="top-header">
+        <div>
+            <h2 class="page-heading">Quản Lý Cơ Sở Vật Chất</h2>
+            <div class="breadcrumb">
+                <span class="back-link">Sổ đầu bài</span> <span class="separator">/</span> <span class="current-class">Phòng học & Thiết bị</span>
+            </div>
+        </div>
+        <div class="header-controls">
+            <button class="btn-settings primary" @onclick="OpenModal">
+                <i class="bi bi-plus-lg"></i> Thêm mới
+            </button>
+        </div>
+    </div>
+
+    <div class="grid-panel">
+        <div class="tabs-header">
+            <div class="tab-item @(activeTab == 1 ? "active" : "")" @onclick="() => ChangeTab(1)">
+                Quản lý Phòng chức năng
+            </div>
+            <div class="tab-item @(activeTab == 2 ? "active" : "")" @onclick="() => ChangeTab(2)">
+                Quản lý Thiết bị
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="vnedu-table">
+                <thead>
+                    <tr class="header-blue">
+                        <th class="text-center" width="60">STT</th>
+                        <th>Mã</th>
+                        <th>Tên @(activeTab == 1 ? "Phòng" : "Thiết bị")</th>
+                        <th>Vị trí / Ghi chú</th>
+                        <th class="text-center">Tình trạng</th>
+                        <th class="text-center" width="100">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in PagedList)
+                    {
+                        <tr>
+                            <td class="text-center">@item.STT</td>
+                            <td><span class="tag-badge primary">@item.Ma</span></td>
+                            <td class="font-bold">@item.Ten</td>
+                            <td>@item.ViTri</td>
+                            <td class="text-center">
+                                @if (item.TinhTrang == "TOT")
+                                {
+                                    <span class="status-badge success">Hoạt động tốt</span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge warning">Đang bảo trì</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <button class="btn-icon">✎</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (TotalPages > 1)
+        {
+            <div class="pagination-container">
+                <span class="pagination-info">Trang @currentPage / @TotalPages</span>
+                <div class="pagination-controls">
+                    <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => ChangePage(currentPage - 1)">‹</button>
+                    @for (int i = 1; i <= TotalPages; i++)
+                    {
+                        var p = i;
+                        <button class="page-btn @(currentPage == p ? "active" : "")" @onclick="() => ChangePage(p)">@p</button>
+                    }
+                    <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => ChangePage(currentPage + 1)">›</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (IsShowModal)
+    {
+        <div class="modal-overlay">
+            <div class="modal-card animate-scale-in">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        @(activeTab == 1 ? "Thêm Phòng Chức Năng" : "Thêm Thiết Bị")
+                    </h3>
+                    <button class="btn-close-modal" @onclick="CloseModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label class="form-label">Mã @(activeTab == 1 ? "phòng" : "thiết bị")</label>
+                            <input type="text" class="custom-input" @bind="NewItem.Ma" placeholder="VD: @(activeTab == 1 ? "LAB01" : "TB01")" />
+                        </div>
+                        <div class="form-group half-width">
+                            <label class="form-label">Tình trạng</label>
+                            <select class="custom-select" @bind="NewItem.TinhTrang">
+                                <option value="TOT">Hoạt động tốt</option>
+                                <option value="BT">Đang bảo trì</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tên @(activeTab == 1 ? "phòng" : "thiết bị")</label>
+                        <input type="text" class="custom-input" @bind="NewItem.Ten" placeholder="Nhập tên..." />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Vị trí / Ghi chú</label>
+                        <textarea class="custom-input" rows="3" @bind="NewItem.ViTri" placeholder="Mô tả vị trí hoặc ghi chú..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-modal-cancel" @onclick="CloseModal">Hủy</button>
+                    <button class="btn-modal-save" @onclick="SaveData">Lưu lại</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private int activeTab = 1;
+    private int currentPage = 1;
+    private int pageSize = 5;
+    private bool IsShowModal = false;
+
+    public class CSVCItem { public int STT { get; set; } public string Ma { get; set; } = ""; public string Ten { get; set; } = ""; public string ViTri { get; set; } = ""; public string TinhTrang { get; set; } = "TOT"; }
+
+    private CSVCItem NewItem = new CSVCItem();
+    private List<CSVCItem> AllItems = new List<CSVCItem>();
+
+    protected override void OnInitialized() => LoadData();
+
+    private void ChangeTab(int tab) { activeTab = tab; currentPage = 1; LoadData(); }
+
+    private void LoadData()
+    {
+        AllItems.Clear();
+        int count = activeTab == 1 ? 15 : 20;
+        string prefix = activeTab == 1 ? "LAB" : "TB";
+        for (int i = 1; i <= count; i++)
+        {
+            AllItems.Add(new CSVCItem { STT = i, Ma = $"{prefix}{i:000}", Ten = activeTab == 1 ? $"Phòng Lab {i}" : $"Máy chiếu Sony {i}", ViTri = $"Khu A - Tầng {i % 3 + 1}", TinhTrang = i % 5 == 0 ? "BT" : "TOT" });
+        }
+    }
+
+    private int TotalItems => AllItems.Count;
+    private int TotalPages => (int)Math.Ceiling((double)TotalItems / pageSize);
+    private List<CSVCItem> PagedList => AllItems.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+
+    private void ChangePage(int newPage) { if (newPage >= 1 && newPage <= TotalPages) currentPage = newPage; }
+    private void OpenModal() { NewItem = new CSVCItem { TinhTrang = "TOT" }; IsShowModal = true; }
+    private void CloseModal() => IsShowModal = false;
+    private void SaveData() { NewItem.STT = AllItems.Count + 1; AllItems.Insert(0, NewItem); CloseModal(); }
+}

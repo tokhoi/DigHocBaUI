@@ -1,0 +1,189 @@
+﻿@page "/sdb-viet-so-dau-bai"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+<div class="page-wrapper animate-fade-in">
+    <!-- HEADER NAV -->
+    <div class="top-nav">
+        <a href="/sdb-lich-day" class="back-btn">
+            <i class="bi bi-arrow-left"></i> Quay lại lịch dạy
+        </a>
+    </div>
+
+    <div class="content-container">
+        <!-- LEFT COLUMN: INFO & FORM -->
+        <div class="main-card">
+            <div class="card-header">
+                <div class="lesson-badge">Tiết @CurrentItem.Tiet</div>
+                <div class="lesson-info">
+                    <h2 class="subject-title">@CurrentItem.MonHoc</h2>
+                    <div class="meta-info">
+                        <span><i class="bi bi-calendar3"></i> Thứ @CurrentItem.Thu - @DateTime.Now.ToString("dd/MM/yyyy")</span>
+                        <span class="separator">•</span>
+                        <span><i class="bi bi-people"></i> Lớp @CurrentItem.Lop</span>
+                        <span class="separator">•</span>
+                        <span><i class="bi bi-person-badge"></i> @CurrentItem.GiaoVien</span>
+                    </div>
+                </div>
+                <div class="status-indicator">
+                    @if (IsSaved)
+                    {
+                        <span class="status-pill success"><i class="bi bi-check-circle-fill"></i> Đã ghi sổ</span>
+                    }
+                    else
+                    {
+                        <span class="status-pill warning"><i class="bi bi-circle-fill"></i> Chưa ghi</span>
+                    }
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label class="form-label">Tên bài học / Nội dung dạy <span class="text-danger">*</span></label>
+                        <input type="text" class="custom-input large-text" @bind="NoiDung" placeholder="Nhập tên bài học hôm nay..." />
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-grow">
+                            <label class="form-label">Học sinh vắng (Nếu có)</label>
+                            <div class="input-icon-wrapper">
+                                <i class="bi bi-person-x icon"></i>
+                                <input type="text" class="custom-input" @bind="Vang" placeholder="Nhập tên HS vắng (VD: Lan, Hùng...)" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nhận xét của Giáo viên</label>
+                        <textarea class="custom-input" rows="4" @bind="NhanXet" placeholder="Nhập nhận xét về tình hình học tập, kỷ luật của lớp..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: GRADING -->
+        <div class="side-panel">
+            <div class="grading-card">
+                <h3 class="panel-title">Đánh giá tiết học</h3>
+
+                <div class="score-section">
+                    <label class="score-label">Điểm số (Thang 10)</label>
+                    <div class="score-input-wrapper">
+                        <button class="btn-score-adj" @onclick="() => AdjustScore(-1)">-</button>
+                        <input type="number" class="score-display" @bind="Diem" min="0" max="10" />
+                        <button class="btn-score-adj" @onclick="() => AdjustScore(1)">+</button>
+                    </div>
+                </div>
+
+                <div class="classification-section">
+                    <label class="score-label">Xếp loại</label>
+                    <div class="segment-control">
+                        @foreach (var loai in new[] { "A", "B", "C", "D" })
+                        {
+                            <div class="segment-item @(XepLoai == loai ? "selected" : "")"
+                                 @onclick="() => SelectXepLoai(loai)">
+                                @loai
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-save" @onclick="LuuSo">
+                        <i class="bi bi-save"></i> Lưu Sổ Đầu Bài
+                    </button>
+                    <button class="btn-cancel" @onclick="GoBack">Hủy bỏ</button>
+                </div>
+            </div>
+
+            <!-- Helper Info -->
+            <div class="helper-card">
+                <h4 class="helper-title">Lưu ý xếp loại</h4>
+                <ul class="helper-list">
+                    <li><strong>Loại A:</strong> Lớp học tốt, sôi nổi (9-10đ)</li>
+                    <li><strong>Loại B:</strong> Có học sinh mất trật tự (7-8đ)</li>
+                    <li><strong>Loại C:</strong> Vệ sinh kém, ồn ào (5-6đ)</li>
+                    <li><strong>Loại D:</strong> Vi phạm nghiêm trọng (5đ)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // Không cần Parameter Id nữa vì đang test trực tiếp
+
+    // Mock Data Models
+    public class LichDayDTO
+    {
+        public int Thu { get; set; }
+        public int Tiet { get; set; }
+        public string MonHoc { get; set; }
+        public string GiaoVien { get; set; }
+        public string Lop { get; set; }
+    }
+
+    private LichDayDTO CurrentItem = new LichDayDTO();
+
+    // Form Variables
+    private string NoiDung { get; set; } = "Phương trình bậc hai một ẩn"; // Mock nội dung sẵn để test nhanh
+    private string Vang { get; set; } = "";
+    private int Diem { get; set; } = 9;
+    private string XepLoai { get; set; } = "A";
+    private string NhanXet { get; set; } = "Lớp học sôi nổi, phát biểu tốt.";
+    private bool IsSaved { get; set; } = false;
+
+    protected override void OnInitialized()
+    {
+        // HARD-CODE DỮ LIỆU TEST TẠI ĐÂY
+        // Giả lập như đang click vào tiết Toán của lớp 10A1
+        CurrentItem = new LichDayDTO
+        {
+            Thu = 2,
+            Tiet = 2,
+            MonHoc = "Đại Số & Giải Tích",
+            GiaoVien = "Nguyễn Văn A", // Tên GV đang đăng nhập
+            Lop = "10A1"
+        };
+
+        // Tính toán xếp loại ban đầu dựa trên điểm mặc định
+        AutoRank();
+    }
+
+    private void AdjustScore(int delta)
+    {
+        int newScore = Diem + delta;
+        if (newScore >= 0 && newScore <= 10)
+        {
+            Diem = newScore;
+            AutoRank(); // Tự động xếp loại khi điểm thay đổi
+        }
+    }
+
+    private void SelectXepLoai(string loai)
+    {
+        XepLoai = loai;
+        // Logic phụ: Nếu chọn loại D, có thể tự động giảm điểm về 4 chẳng hạn (tùy nghiệp vụ)
+    }
+
+    private void AutoRank()
+    {
+        // Logic tự động gợi ý xếp loại dựa trên điểm số
+        if (Diem >= 9) XepLoai = "A";
+        else if (Diem >= 7) XepLoai = "B";
+        else if (Diem >= 5) XepLoai = "C";
+        else XepLoai = "D";
+    }
+
+    private async Task LuuSo()
+    {
+        await Task.Delay(600); // Delay giả loading
+        IsSaved = true;
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/sdb-lich-day");
+    }
+}

@@ -1,0 +1,135 @@
+﻿@page "/sdb-danh-muc"
+@rendermode InteractiveServer
+@using DigHocBaUI.Models
+
+<div class="page-wrapper animate-fade-in">
+    <div class="top-header">
+        <h2 class="page-title">Quản lý Danh mục</h2>
+        <button class="btn-action btn-blue">+ Thêm mới</button>
+    </div>
+
+    <div class="tabs-container">
+        <div class="tab-item @(activeTab == 1 ? "active" : "")" @onclick="() => ChangeTab(1)">Loại hình dạy</div>
+        <div class="tab-item @(activeTab == 2 ? "active" : "")" @onclick="() => ChangeTab(2)">Loại phòng chức năng</div>
+        <div class="tab-item @(activeTab == 3 ? "active" : "")" @onclick="() => ChangeTab(3)">Tình trạng phòng</div>
+        <div class="tab-item @(activeTab == 4 ? "active" : "")" @onclick="() => ChangeTab(4)">Tình trạng thiết bị</div>
+        <div class="tab-item @(activeTab == 5 ? "active" : "")" @onclick="() => ChangeTab(5)">Xếp loại tiết học</div>
+    </div>
+
+    <div class="toolbar">
+        <div class="search-box">
+            <input type="text" placeholder="Tìm kiếm danh mục..." />
+            <button class="btn-search">🔍</button>
+        </div>
+    </div>
+
+    <div class="grid-panel">
+        <table class="vnedu-table">
+            <thead>
+                <tr>
+                    <th width="50">STT</th>
+                    <th>Mã danh mục</th>
+                    <th>Tên danh mục</th>
+                    <th>Mô tả</th>
+                    <th class="text-center">Trạng thái</th>
+                    <th width="100">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in PagedList)
+                {
+                    <tr>
+                        <td class="text-center">@item.Id</td>
+                        <td>@item.Ma</td>
+                        <td style="font-weight:600; color:#003380">@item.Ten</td>
+                        <td>@item.MoTa</td>
+                        <td class="text-center">
+                            <span class="status-badge @(item.TrangThai ? "success" : "warning")">
+                                @(item.TrangThai ? "Sử dụng" : "Khóa")
+                            </span>
+                        </td>
+                        <td><button class="btn-action btn-green" style="padding: 4px 10px; font-size:12px;">Sửa</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- PAGINATION CONTROLS -->
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Hiển thị @((currentPage - 1) * pageSize + 1) - @Math.Min(currentPage * pageSize, TotalItems) trên tổng số @TotalItems bản ghi
+            </div>
+            <div class="pagination-buttons">
+                <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => ChangePage(currentPage - 1)">‹</button>
+                
+                @for (int i = 1; i <= TotalPages; i++)
+                {
+                    var p = i;
+                    <button class="page-btn @(currentPage == p ? "active" : "")" @onclick="() => ChangePage(p)">@p</button>
+                }
+
+                <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => ChangePage(currentPage + 1)">›</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private int activeTab = 1;
+    
+    // Pagination Logic
+    private int currentPage = 1;
+    private int pageSize = 10;
+    private int TotalItems => AllItems.Count;
+    private int TotalPages => (int)Math.Ceiling((double)TotalItems / pageSize);
+
+    // Mock Data Store
+    private List<DanhMucItem> AllItems = new List<DanhMucItem>();
+
+    protected override void OnInitialized()
+    {
+        LoadData(); // Load initial data
+    }
+
+    private void ChangeTab(int tabIndex)
+    {
+        activeTab = tabIndex;
+        currentPage = 1; // Reset to page 1 when switching tabs
+        LoadData();
+    }
+
+    private void LoadData()
+    {
+        // Mock loading data based on activeTab
+        AllItems.Clear();
+        string prefix = activeTab switch { 1 => "LHD", 2 => "LP", 3 => "TTP", 4 => "TTTB", _ => "XL" };
+        string name = activeTab switch { 1 => "Dạy chính khóa", 2 => "Phòng Lab", 3 => "Đang bảo trì", 4 => "Hỏng hóc", _ => "Tiết A" };
+
+        // Generate 25 items to demonstrate pagination
+        for (int i = 1; i <= 25; i++)
+        {
+            AllItems.Add(new DanhMucItem { Id = i, Ma = $"{prefix}{i:000}", Ten = $"{name} {i}", MoTa = "Mô tả mẫu...", TrangThai = i % 5 != 0 });
+        }
+    }
+
+    private List<DanhMucItem> PagedList
+    {
+        get
+        {
+            return AllItems
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+        }
+    }
+
+    private void ChangePage(int page)
+    {
+        if (page >= 1 && page <= TotalPages)
+        {
+            currentPage = page;
+        }
+    }
+    
+    public class DanhMucItem { public int Id { get; set; } public string Ma { get; set; } public string Ten { get; set; } public string MoTa { get; set; } public bool TrangThai { get; set; } }
+}

@@ -58,8 +58,40 @@
                 </div>
             </div>
 
-            <div class="nav-item has-arrow">Học trực tuyến LMS</div>
-            <div class="nav-item has-arrow">Thư viện số</div>
+        <div class="nav-group-active">
+                <div class="nav-item highlight-parent">
+                    Sổ đầu bài <span class="arrow-down">▼</span>
+                </div>
+                
+                <div class="sub-menu">
+                    <NavLink class="sub-item" href="sdb-ke-hoach-giang-day" @onclick="CloseSidebarOnMobile">
+                        Kế Hoạch Giảng Dạy
+                    </NavLink>
+                    <NavLink class="sub-item" href="sdb-lich-day" @onclick="CloseSidebarOnMobile">
+                        Lịch dạy & TKB
+                    </NavLink>
+                    <NavLink class="sub-item" href="sdb-viet-so-dau-bai" @onclick="CloseSidebarOnMobile">
+                        Ghi sổ đầu bài
+                    </NavLink>
+                    <NavLink class="sub-item" href="sdb-to-chuc-nhan-su" @onclick="CloseSidebarOnMobile">
+                        Ghi sổ đầu bài
+                    </NavLink>
+                    <NavLink class="sub-item" href="sdb-phan-quyen" @onclick="CloseSidebarOnMobile">
+                        Ghi sổ đầu bài
+                    </NavLink>
+
+                    @* <NavLink class="sub-item" href="sdb-danh-muc" @onclick="CloseSidebarOnMobile">
+                        Quản lý danh mục
+                    </NavLink> *@
+                    <NavLink class="sub-item" href="sdb-co-so-vat-chat" @onclick="CloseSidebarOnMobile">
+                        Cơ sở vật chất
+                    </NavLink>
+                    <NavLink class="sub-item" href="sdb-phong-chuc-nang" @onclick="CloseSidebarOnMobile">
+                        Phòng Chức Năng
+                    </NavLink>
+
+                </div>
+            </div>            <div class="nav-item has-arrow">Thư viện số</div>
         </nav>
     </aside>
 

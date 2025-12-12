@@ -1,0 +1,239 @@
+﻿@page "/sdb-lich-day"
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<div class="page-wrapper animate-fade-in">
+    <div class="top-header">
+        <div>
+            <h2 class="page-heading">Quản Lý Lịch Giảng Dạy</h2>
+            <div class="breadcrumb">
+                <span class="back-link">Sổ đầu bài</span> <span class="separator">/</span> <span class="current-class">Lịch cá nhân & TKB</span>
+            </div>
+        </div>
+        <div class="header-controls">
+            <select class="custom-select"><option>Tuần 15 (11/12 - 17/12)</option></select>
+            @if (activeTab == 2)
+            {
+                <button class="btn-settings primary" @onclick="OpenModal">
+                    <i class="bi bi-plus-lg"></i> Đăng ký
+                </button>
+            }
+        </div>
+    </div>
+
+    <div class="grid-panel">
+        <div class="tabs-header">
+            <div class="tab-item @(activeTab == 1 ? "active" : "")" @onclick="() => activeTab = 1">
+                Thời khóa biểu
+            </div>
+            <div class="tab-item @(activeTab == 2 ? "active" : "")" @onclick="() => activeTab = 2">
+                Quản lý Dạy thay / Dạy bù <span class="badge-count">2</span>
+            </div>
+        </div>
+
+        @if (activeTab == 1)
+        {
+            <div class="table-responsive">
+                <table class="vnedu-table scheduler-table">
+                    <thead>
+                        <tr>
+                            <th width="60">Tiết</th>
+                            <th>Thứ 2</th>
+                            <th>Thứ 3</th>
+                            <th>Thứ 4</th>
+                            <th>Thứ 5</th>
+                            <th>Thứ 6</th>
+                            <th>Thứ 7</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int tiet = 1; tiet <= 10; tiet++)
+                        {
+                            if (tiet == 1)
+                            {
+                                <tr class="group-row"><td colspan="7">▼ BUỔI SÁNG</td></tr>
+                            }
+                            if (tiet == 6)
+                            {
+                                <tr class="group-row"><td colspan="7">▼ BUỔI CHIỀU</td></tr>
+                            }
+                            <tr>
+                                <td class="text-center font-bold">Tiết @tiet</td>
+                                @for (int thu = 2; thu <= 7; thu++)
+                                {
+                                    <td class="cell-content">
+                                        @if (thu == 2 && tiet == 1)
+                                        {
+                                            <div class="schedule-card">
+                                                <strong class="text-primary">Chào Cờ</strong>
+                                                <span class="text-muted small">Sân trường</span>
+                                            </div>
+                                        }
+                                        else if (thu % 2 == 0 && tiet % 2 != 0)
+                                        {
+                                            <div class="schedule-card">
+                                                <strong class="text-primary">Toán Học</strong>
+                                                <span class="text-muted small">Lớp 10A1</span>
+                                                <button class="btn-settings primary" style="padding: 2px 8px; font-size: 11px; margin-top: auto;" @onclick="NavigateToVietSo">
+                                                    ✎ Ghi sổ
+                                                </button>
+                                            </div>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        @if (activeTab == 2)
+        {
+            <div class="table-responsive">
+                <table class="vnedu-table">
+                    <thead>
+                        <tr>
+                            <th class="text-center" width="50">STT</th>
+                            <th>Loại yêu cầu</th>
+                            <th>Lớp - Môn</th>
+                            <th>Thời gian</th>
+                            <th>Lý do / Ghi chú</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th class="text-center" width="100">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in PagedList)
+                        {
+                            <tr>
+                                <td class="text-center">@item.Id</td>
+                                <td>
+                                    @if (item.Type == "Thay")
+                                    {
+                                        <span class="tag-badge warning">Dạy thay</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span class="tag-badge primary">Dạy bù</span>
+                                    }
+                                </td>
+                                <td class="font-bold">@item.Class - @item.Subject</td>
+                                <td>Tiết @item.Period - Thứ @item.Day</td>
+                                <td>@item.Reason</td>
+                                <td class="text-center">
+                                    @if (item.Status == "Approved")
+                                    {
+                                        <span class="status-badge success">Đã duyệt</span>
+                                    }
+                                    else
+                                    {
+
+                                        <span class="status-badge warning">Chờ duyệt</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn-icon">✎</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination-container">
+                <div class="pagination-info">Trang @currentPage / @TotalPages</div>
+                <div class="pagination-buttons">
+                    <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => currentPage--">‹</button>
+                    <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => currentPage++">›</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (IsShowModal)
+    {
+        <div class="modal-overlay">
+            <div class="modal-card animate-scale-in">
+                <div class="modal-header">
+                    <h3 class="modal-title">Đăng ký Dạy Thay / Dạy Bù</h3>
+                    <button class="btn-close-modal" @onclick="CloseModal">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Loại đăng ký</label>
+                        <select class="custom-select">
+                            <option>Đăng ký Dạy thay (GV nghỉ)</option>
+                            <option>Đăng ký Dạy bù</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label class="form-label">Ngày dạy</label>
+                            <input type="date" class="custom-input" />
+                        </div>
+                        <div class="form-group half-width">
+                            <label class="form-label">Tiết</label>
+                            <select class="custom-select"><option>Tiết 1</option><option>Tiết 2</option></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ghi chú</label>
+                        <textarea class="custom-input" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-modal-cancel" @onclick="CloseModal">Hủy</button>
+                    <button class="btn-modal-save" @onclick="CloseModal">Gửi yêu cầu</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private int activeTab = 1;
+    private bool IsShowModal = false;
+    private int currentPage = 1;
+    private int pageSize = 10;
+
+    public class RequestItem
+    {
+        public int Id { get; set; }
+        public string Type { get; set; } = "";
+        public string Class { get; set; } = "";
+        public string Subject { get; set; } = "";
+        public int Period { get; set; }
+        public int Day { get; set; }
+        public string Reason { get; set; } = "";
+        public string Status { get; set; } = "";
+    }
+
+    private List<RequestItem> AllItems = new List<RequestItem>();
+
+    protected override void OnInitialized()
+    {
+        for (int i = 1; i <= 15; i++)
+        {
+            AllItems.Add(new RequestItem
+            {
+                Id = i,
+                Type = i % 2 == 0 ? "Thay" : "Bu",
+                Class = "10A1",
+                Subject = "Toán",
+                Period = 2,
+                Day = 3,
+                Reason = "GV ốm",
+                Status = i % 3 == 0 ? "Pending" : "Approved"
+            });
+        }
+    }
+
+    private List<RequestItem> PagedList => AllItems.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+    private int TotalPages => (int)Math.Ceiling((double)AllItems.Count / pageSize);
+
+    private void OpenModal() => IsShowModal = true;
+    private void CloseModal() => IsShowModal = false;
+    private void NavigateToVietSo() => NavigationManager.NavigateTo("/sdb-viet-so-dau-bai");
+}

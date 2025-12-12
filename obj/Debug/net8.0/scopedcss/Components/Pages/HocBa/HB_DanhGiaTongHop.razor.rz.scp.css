@@ -1,5 +1,5 @@
 /* --- GLOBAL LAYOUT --- */
-.page-wrapper[b-x4mqpkvoyw] {
+.page-wrapper[b-usug3bu7h8] {
     padding: 25px 35px;
     background: #f8f9fc;
     min-height: 100vh;
@@ -7,21 +7,21 @@
 }
 
 /* HEADER */
-.top-header[b-x4mqpkvoyw] {
+.top-header[b-usug3bu7h8] {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
 }
 
-.page-heading[b-x4mqpkvoyw] {
+.page-heading[b-usug3bu7h8] {
     font-size: 22px;
     font-weight: 700;
     color: #1e293b;
     margin: 0;
 }
 
-.breadcrumb[b-x4mqpkvoyw] {
+.breadcrumb[b-usug3bu7h8] {
     margin-top: 5px;
     font-size: 14px;
     color: #64748b;
@@ -30,35 +30,35 @@
     gap: 8px;
 }
 
-.back-link[b-x4mqpkvoyw] {
+.back-link[b-usug3bu7h8] {
     cursor: pointer;
     color: #3b82f6;
     font-weight: 600;
     transition: 0.2s;
 }
 
-    .back-link:hover[b-x4mqpkvoyw] {
+    .back-link:hover[b-usug3bu7h8] {
         text-decoration: underline;
         color: #1d4ed8;
     }
 
-.current-class[b-x4mqpkvoyw] {
+.current-class[b-usug3bu7h8] {
     font-weight: 700;
     color: #1e293b;
 }
 
-.separator[b-x4mqpkvoyw] {
+.separator[b-usug3bu7h8] {
     color: #ccc;
 }
 
 /* CONTROLS HEADER */
-.header-controls[b-x4mqpkvoyw] {
+.header-controls[b-usug3bu7h8] {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-.custom-select[b-x4mqpkvoyw] {
+.custom-select[b-usug3bu7h8] {
     padding: 8px 12px;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
@@ -67,7 +67,7 @@
     outline: none;
 }
 
-.btn-settings[b-x4mqpkvoyw] {
+.btn-settings[b-usug3bu7h8] {
     padding: 8px 10px;
     border: 1px solid #e2e8f0;
     background: white;
@@ -75,7 +75,7 @@
     cursor: pointer;
 }
 
-.user-profile[b-x4mqpkvoyw] {
+.user-profile[b-usug3bu7h8] {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -83,7 +83,7 @@
     border-left: 1px solid #e2e8f0;
 }
 
-.avatar[b-x4mqpkvoyw] {
+.avatar[b-usug3bu7h8] {
     width: 35px;
     height: 35px;
     background: #cbd5e1;
@@ -95,19 +95,19 @@
     font-weight: bold;
 }
 
-.user-info[b-x4mqpkvoyw] {
+.user-info[b-usug3bu7h8] {
     display: flex;
     flex-direction: column;
     font-size: 12px;
 }
 
-.name[b-x4mqpkvoyw] {
+.name[b-usug3bu7h8] {
     font-weight: 700;
     color: #333;
 }
 
 /* --- TOOLBAR (SỬA LỖI LAYOUT) --- */
-.toolbar-container[b-x4mqpkvoyw] {
+.toolbar-container[b-usug3bu7h8] {
     background: white;
     padding: 15px 20px;
     border-radius: 8px 8px 0 0; /* Bo góc trên */
@@ -118,7 +118,7 @@
     justify-content: space-between;
 }
 
-.toolbar-left[b-x4mqpkvoyw] {
+.toolbar-left[b-usug3bu7h8] {
     display: flex;
     gap: 10px;
     align-items: center;
@@ -126,7 +126,7 @@
 }
 
 /* Search Group: Input + Button dính liền */
-.search-group[b-x4mqpkvoyw] {
+.search-group[b-usug3bu7h8] {
     display: flex;
     border: 1px solid #d1d5db;
     border-radius: 6px;
@@ -134,7 +134,7 @@
     height: 38px;
 }
 
-    .search-group input[b-x4mqpkvoyw] {
+    .search-group input[b-usug3bu7h8] {
         border: none;
         padding: 0 12px;
         width: 250px;
@@ -142,7 +142,7 @@
         font-size: 14px;
     }
 
-.btn-search[b-x4mqpkvoyw] {
+.btn-search[b-usug3bu7h8] {
     background: #2563eb;
     color: white;
     border: none;
@@ -153,11 +153,11 @@
     transition: 0.2s;
 }
 
-    .btn-search:hover[b-x4mqpkvoyw] {
+    .btn-search:hover[b-usug3bu7h8] {
         background: #1d4ed8;
     }
 
-.filter-select[b-x4mqpkvoyw] {
+.filter-select[b-usug3bu7h8] {
     height: 38px;
     padding: 0 15px;
     border: 1px solid #d1d5db;
@@ -170,7 +170,7 @@
 }
 
 /* --- TABLE --- */
-.grid-panel[b-x4mqpkvoyw] {
+.grid-panel[b-usug3bu7h8] {
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 0 0 8px 8px; /* Bo góc dưới */
@@ -178,32 +178,32 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
-.table-responsive[b-x4mqpkvoyw] {
+.table-responsive[b-usug3bu7h8] {
     overflow-x: auto;
     width: 100%;
 }
 /* Cuộn ngang cho bảng to */
 
-.vnedu-table[b-x4mqpkvoyw] {
+.vnedu-table[b-usug3bu7h8] {
     width: 100%;
     border-collapse: collapse;
     font-size: 13px;
 }
 
-    .vnedu-table th[b-x4mqpkvoyw], .vnedu-table td[b-x4mqpkvoyw] {
+    .vnedu-table th[b-usug3bu7h8], .vnedu-table td[b-usug3bu7h8] {
         padding: 12px 10px;
         border: 1px solid #e2e8f0;
     }
 
 /* Header Styles */
-.header-light th[b-x4mqpkvoyw] {
+.header-light th[b-usug3bu7h8] {
     background: #f8fafc;
     color: #64748b;
     font-weight: 700;
     text-align: left;
 }
 
-.header-blue th[b-x4mqpkvoyw] {
+.header-blue th[b-usug3bu7h8] {
     background: #2563eb;
     color: white;
     font-weight: 600;
@@ -212,34 +212,34 @@
 }
 
 /* Sticky Columns (Cố định cột Tên) */
-.sticky-col[b-x4mqpkvoyw] {
+.sticky-col[b-usug3bu7h8] {
     position: sticky;
     left: 0;
     z-index: 2;
     background: inherit;
 }
 
-    .sticky-col.name[b-x4mqpkvoyw] {
+    .sticky-col.name[b-usug3bu7h8] {
         left: 50px;
         z-index: 3;
         border-right: 2px solid #e2e8f0;
     }
 
-    .sticky-col.stt[b-x4mqpkvoyw] {
+    .sticky-col.stt[b-usug3bu7h8] {
         width: 50px;
         text-align: center;
         z-index: 3;
     }
 
 /* Rows */
-.group-row td[b-x4mqpkvoyw] {
+.group-row td[b-usug3bu7h8] {
     background: #f1f5f9;
     font-weight: 700;
     color: #333;
     padding: 10px 15px;
 }
 
-.class-link[b-x4mqpkvoyw] {
+.class-link[b-usug3bu7h8] {
     color: #2563eb;
     font-weight: 700;
     cursor: pointer;
@@ -247,32 +247,32 @@
     font-size: 14px;
 }
 
-    .class-link:hover[b-x4mqpkvoyw] {
+    .class-link:hover[b-usug3bu7h8] {
         text-decoration: underline;
     }
 
-.text-center[b-x4mqpkvoyw] {
+.text-center[b-usug3bu7h8] {
     text-align: center;
 }
 
-.text-left[b-x4mqpkvoyw] {
+.text-left[b-usug3bu7h8] {
     text-align: left;
 }
 
-.font-bold[b-x4mqpkvoyw] {
+.font-bold[b-usug3bu7h8] {
     font-weight: 600;
 }
-.status-dot-red[b-x4mqpkvoyw] {
+.status-dot-red[b-usug3bu7h8] {
     color: #ef4444;
     font-size: 10px;
 }
-.status-dot-green[b-x4mqpkvoyw] {
+.status-dot-green[b-usug3bu7h8] {
     color: #38c300;
     font-size: 10px;
 }
 
 /* --- PAGINATION (STYLE LẠI ĐẸP HƠN) --- */
-.pagination-container[b-x4mqpkvoyw] {
+.pagination-container[b-usug3bu7h8] {
     padding: 12px 20px;
     background: white;
     border-top: 1px solid #e2e8f0;
@@ -280,13 +280,13 @@
     justify-content: flex-end;
 }
 
-.pagination-controls[b-x4mqpkvoyw] {
+.pagination-controls[b-usug3bu7h8] {
     display: flex;
     gap: 5px;
     align-items: center;
 }
 
-.page-btn[b-x4mqpkvoyw] {
+.page-btn[b-usug3bu7h8] {
     min-width: 32px;
     height: 32px;
     border: 1px solid #e2e8f0;
@@ -301,20 +301,20 @@
     transition: 0.2s;
 }
 
-    .page-btn:hover[b-x4mqpkvoyw] {
+    .page-btn:hover[b-usug3bu7h8] {
         background: #f1f5f9;
         border-color: #cbd5e1;
         color: #1e293b;
     }
 
-    .page-btn.active[b-x4mqpkvoyw] {
+    .page-btn.active[b-usug3bu7h8] {
         background: #2563eb;
         color: white;
         border-color: #2563eb;
         font-weight: 700;
     }
 
-.page-size-select[b-x4mqpkvoyw] {
+.page-size-select[b-usug3bu7h8] {
     height: 32px;
     border: 1px solid #e2e8f0;
     border-radius: 4px;
@@ -323,7 +323,7 @@
 }
 
 /* --- ANIMATIONS --- */
-@keyframes fadeInUp-b-x4mqpkvoyw {
+@keyframes fadeInUp-b-usug3bu7h8 {
     from {
         opacity: 0;
         transform: translateY(15px);
@@ -335,6 +335,6 @@
     }
 }
 
-.animate-fade-in[b-x4mqpkvoyw] {
-    animation: fadeInUp-b-x4mqpkvoyw 0.4s ease-out;
+.animate-fade-in[b-usug3bu7h8] {
+    animation: fadeInUp-b-usug3bu7h8 0.4s ease-out;
 }

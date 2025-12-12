@@ -193,3 +193,59 @@
     }
 
 }
+/* ... existing code ... */
+
+/* --- PAGINATION STYLES (NEW) --- */
+.pagination-container[b-rthkok19l8] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-top: 1px solid #e2e8f0;
+    background-color: white;
+}
+
+.pagination-info[b-rthkok19l8] {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.pagination-buttons[b-rthkok19l8] {
+    display: flex;
+    gap: 5px;
+}
+
+.page-btn[b-rthkok19l8] {
+    min-width: 32px;
+    height: 32px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #64748b;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .page-btn:hover:not(:disabled)[b-rthkok19l8] {
+        background-color: #f1f5f9;
+        color: #1e293b;
+        border-color: #cbd5e1;
+    }
+
+    .page-btn.active[b-rthkok19l8] {
+        background-color: #2563eb;
+        color: white;
+        border-color: #2563eb;
+        font-weight: 600;
+    }
+
+    .page-btn:disabled[b-rthkok19l8] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background-color: #f8fafc;
+    }
