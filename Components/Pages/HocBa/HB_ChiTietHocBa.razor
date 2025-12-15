@@ -1,0 +1,147 @@
+﻿@page "/phat-hanh-hoc-ba/chi-tiet/{Id:int}"
+@rendermode InteractiveServer
+@inject NavigationManager NavManager
+
+<div class="page-wrapper animate-fade-in">
+    <div class="mb-3">
+        <a href="/phat-hanh-hoc-ba" class="back-link">
+            <i class="bi bi-arrow-left"></i> Quay lại danh sách
+        </a>
+    </div>
+
+    @if (IsLoading)
+    {
+        <div>Đang tải dữ liệu...</div>
+    }
+    else if (CurrentStudent == null)
+    {
+        <div class="grid-panel">Không tìm thấy học sinh.</div>
+    }
+    else
+    {
+        <div class="student-info-card">
+            <h2 class="student-name">@CurrentStudent.TenHocSinh</h2>
+
+            <div class="info-grid">
+                <div class="info-col">
+                    <p><span class="label">Mã định danh:</span> <span class="value">@CurrentStudent.MaDinhDanh</span></p>
+                    <p><span class="label">Ngày sinh:</span> <span class="value">@CurrentStudent.NgaySinhFormatted</span></p>
+                    <p><span class="label">Chiều cao:</span> <span class="value">@CurrentStudent.ChieuCao</span></p>
+                    <p><span class="label">Cân nặng:</span> <span class="value">@CurrentStudent.CanNang</span></p>
+                </div>
+                <div class="info-col">
+                    <p><span class="label">Lớp:</span> <span class="value">@CurrentStudent.Lop</span></p>
+                    <p><span class="label">GVCN:</span> <span class="value">@CurrentStudent.GVCN</span></p>
+                    <p><span class="label">Số buổi nghỉ có phép:</span> <span class="value">@CurrentStudent.NghiCoPhep</span></p>
+                    <p><span class="label">Số buổi nghỉ không phép:</span> <span class="value">@CurrentStudent.NghiKoPhep</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs-sub">
+            <button class="btn-tab active">Danh sách môn</button>
+            <button class="btn-tab">Khác</button>
+        </div>
+
+        <div class="grid-panel">
+            <table class="vnedu-table detail-table">
+                <thead>
+                    <tr>
+                        <th width="50" class="text-center">STT</th>
+                        <th width="200">Môn học</th>
+                        <th width="100" class="text-center">Mức đạt được</th>
+                        <th width="100" class="text-center">Điểm KTĐK</th>
+                        <th>Đánh giá nhận xét</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var mon in ListMonHoc)
+                    {
+                        <tr>
+                            <td class="text-center">@mon.STT</td>
+                            <td style="font-weight: 600;">@mon.TenMon</td>
+                            <td class="text-center">@mon.MucDat</td>
+                            <td class="text-center">@mon.Diem</td>
+                            <td class="comment-cell">@mon.NhanXet</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private bool IsLoading = true;
+
+    public class HocSinhInfo
+    {
+        public int Id { get; set; }
+        public string TenHocSinh { get; set; }
+        public string MaDinhDanh { get; set; }
+        public string NgaySinh { get; set; }
+        public string NgaySinhFormatted => string.IsNullOrWhiteSpace(NgaySinh) ? "" : NgaySinh;
+        public string ChieuCao { get; set; }
+        public string CanNang { get; set; }
+        public string Lop { get; set; }
+        public string GVCN { get; set; }
+        public int NghiCoPhep { get; set; }
+        public int NghiKoPhep { get; set; }
+    }
+
+    public class MonHocResult
+    {
+        public int STT { get; set; }
+        public string TenMon { get; set; }
+        public string MucDat { get; set; }
+        public string Diem { get; set; }
+        public string NhanXet { get; set; }
+    }
+
+    private HocSinhInfo CurrentStudent;
+    private List<MonHocResult> ListMonHoc = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        IsLoading = true;
+
+        // TODO: replace with real data fetch by Id (call API / service)
+        await Task.Delay(80); // simulate async
+
+        // mock: if Id out of range, set null
+        if (Id <= 0)
+        {
+            CurrentStudent = null;
+            ListMonHoc = new();
+            IsLoading = false;
+            return;
+        }
+
+        CurrentStudent = new HocSinhInfo
+        {
+            Id = Id,
+            TenHocSinh = "Lê Đức Bảo",
+            MaDinhDanh = "079217030682",
+            NgaySinh = "28/09/2017",
+            ChieuCao = "119cm",
+            CanNang = "19kg",
+            Lop = "1A1",
+            GVCN = "Tô Thị Uyên",
+            NghiCoPhep = 0,
+            NghiKoPhep = 0
+        };
+
+        ListMonHoc = new List<MonHocResult>
+        {
+            new MonHocResult { STT = 1, TenMon = "Đạo đức", MucDat = "T", Diem = "", NhanXet = "Em biết ghi nhận..." },
+            new MonHocResult { STT = 2, TenMon = "Giáo dục thể chất", MucDat = "T", Diem = "", NhanXet = "Em nắm được kỹ thuật..." },
+            new MonHocResult { STT = 3, TenMon = "Hoạt động trải nghiệm", MucDat = "T", Diem = "", NhanXet = "Em tích cực tham gia..." },
+            new MonHocResult { STT = 4, TenMon = "Lịch sử và Địa lý", MucDat = "H", Diem = "8", NhanXet = "Nắm vững kiến thức cơ bản..." },
+            new MonHocResult { STT = 5, TenMon = "Nghệ thuật (Âm nhạc)", MucDat = "T", Diem = "", NhanXet = "Em tham gia tích cực..." }
+        };
+
+        IsLoading = false;
+    }
+}

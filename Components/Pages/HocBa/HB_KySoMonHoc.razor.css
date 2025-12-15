@@ -169,3 +169,12 @@
     .status-text.pending {
         color: #dc2626; /* Đỏ */
     }
+
+.badge-gray {
+    background: #f3f4f6;
+    color: #4b5563;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}

@@ -1,0 +1,18 @@
+﻿<div class="pagination-container">
+    <span class="pagination-info">Trang @CurrentPage / @TotalPages</span>
+    <div class="pagination-controls">
+        <button class="page-btn" disabled="@(CurrentPage == 1)" @onclick="() => OnPageChanged.InvokeAsync(CurrentPage - 1)">‹</button>
+        @for (int i = 1; i <= TotalPages; i++)
+        {
+            var p = i;
+            <button class="page-btn @(CurrentPage == p ? "active" : "")" @onclick="() => OnPageChanged.InvokeAsync(p)">@p</button>
+        }
+        <button class="page-btn" disabled="@(CurrentPage == TotalPages)" @onclick="() => OnPageChanged.InvokeAsync(CurrentPage + 1)">›</button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int TotalPages { get; set; }
+    [Parameter] public int CurrentPage { get; set; }
+    [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+}

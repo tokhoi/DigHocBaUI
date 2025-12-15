@@ -3,3 +3,4 @@ wwwroot\bootstrap\bootstrap.min.css
 wwwroot\bootstrap\bootstrap.min.css.map
 wwwroot\bootstrap\javascripts\chart-utils.js
 wwwroot\favicon.png
+wwwroot\js\confirm.js

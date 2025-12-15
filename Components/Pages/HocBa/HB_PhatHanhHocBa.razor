@@ -1,86 +1,426 @@
 ﻿@page "/phat-hanh-hoc-ba"
+@inject NavigationManager NavManager
+@inject IJSRuntime JS
+@using DigHocBaUI.Components
 @rendermode InteractiveServer
-@using DigHocBaUI.Models
+@using DigHocBaUI.Components.FormComponents
 
 <div class="page-wrapper">
-    <div class="tabs">
-        <div class="tab-item active">Danh sách học bạ</div>
-        <div class="tab-item">Danh sách gói tin</div>
-    </div>
 
-    <div class="toolbar">
-        <h2 class="page-title">Danh sách học bạ</h2>
-        <div class="actions">
-            <button class="btn btn-blue">Đóng gói và ký</button>
+    <!-- ===================== -->
+    <!--        TABS           -->
+    <!-- ===================== -->
+    <div class="tabs">
+        <div class="tab-item @(ActiveTab == 1 ? "active" : "")" @onclick="() => SwitchTab(1)">
+            Chọn học sinh lập gói
+        </div>
+
+        <div class="tab-item @(ActiveTab == 2 ? "active" : "")" @onclick="() => SwitchTab(2)">
+            Quản lý gói tin đã tạo
         </div>
     </div>
 
-    <div class="grid-panel">
-        <table class="vnedu-table">
-            <thead>
-                <tr>
-                    <th width="40"><input type="checkbox" /></th>
-                    <th width="60">STT</th>
-                    <th width="80">Lớp</th>
-                    <th width="150">Số học bạ<br>đã phát hành</th>
-                    <th width="150">Số học bạ<br>đã lưu hành</th>
-                    <th>Các trạng thái khác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in PagedList)
-                {
-                    <tr>
-                        <td><input type="checkbox" /></td>
-                        <td>@item.STT</td>
-                        <td>@item.Lop</td>
-                        <td>@item.SoHocBaPhatHanh</td>
-                        <td>@item.SoHocBaPhatHanh</td>
-                        <td class="badges-cell">
-                            <span class="badge badge-cyan">Đã ban hành: @(item.IsBanHanh ? "0" : "42")</span>
-                            <span class="badge badge-yellow">Chờ xử lý: 0</span>
-                            <span class="badge badge-green">Đang lưu hành tại Sở: 0</span>
-                            <span class="badge badge-purple">Đang lưu hành tại Bộ: 0</span>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
 
-    @if (TotalPages > 1)
+    <!-- ============================================================
+         TAB 1 — DANH SÁCH HỌC SINH (CHƯA ĐÓNG GÓI)
+    ============================================================ -->
+    @if (ActiveTab == 1)
     {
-        <div class="pagination-container">
-            <span class="pagination-info">Trang @currentPage / @TotalPages</span>
-            <div class="pagination-controls">
-                <button class="page-btn" disabled="@(currentPage == 1)" @onclick="() => ChangePage(currentPage - 1)">‹</button>
-                @for (int i = 1; i <= TotalPages; i++)
-                {
-                    var p = i;
-                    <button class="page-btn @(currentPage == p ? "active" : "")" @onclick="() => ChangePage(p)">@p</button>
-                }
-                <button class="page-btn" disabled="@(currentPage == TotalPages)" @onclick="() => ChangePage(currentPage + 1)">›</button>
+        <div class="toolbar">
+
+            <h2 class="page-title">Danh sách học sinh (Chưa đóng gói)</h2>
+
+            <div class="actions">
+
+                <!-- SEARCH -->
+                <div class="search-box">
+                    <input type="text"
+                           class="search-input"
+                           placeholder="Tìm kiếm học sinh..."
+                           @bind="SearchHocBa"
+                           @bind:event="oninput" />
+                    <button class="btn-search">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+
+                <!-- CREATE PACKAGE BUTTON -->
+                <button class="btn-primary"
+                        @onclick="TaoGoiTinMoi"
+                        disabled="@(!SelectedHocBaIds.Any())">
+                    Tạo gói tin mới (@SelectedHocBaIds.Count)
+                </button>
+
             </div>
         </div>
+
+
+        <!-- TABLE -->
+        <div class="grid-panel">
+
+            <table class="vnedu-table">
+                <thead>
+                    <tr>
+                        <th width="40">
+                            <input type="checkbox" @onchange="ToggleSelectAll" />
+                        </th>
+                        <th width="60" class="text-center">STT</th>
+                        <th>MÃ ĐỊNH DANH</th>
+                        <th>HỌ VÀ TÊN HỌC SINH</th>
+                        <th>CHI TIẾT</th>
+                        <th>TRẠNG THÁI</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var hs in PagedHocBaList)
+                    {
+                        <tr>
+                            <td>
+                                <input type="checkbox"
+                                       checked="@SelectedHocBaIds.Contains(hs.Id)"
+                                       @onchange="() => ToggleSelection(hs.Id)" />
+                            </td>
+
+                            <td class="text-center">@hs.STT</td>
+                            <td>@hs.MaDinhDanh</td>
+                            <td style="font-weight:600">@hs.TenHocSinh</td>
+
+                            <td>
+                                <a href="/phat-hanh-hoc-ba/chi-tiet/@hs.Id" style="color:#2563eb;">
+                                    Xem chi tiết
+                                </a>
+                            </td>
+
+                            <td>
+                                <span class="badge badge-yellow">Chưa đóng gói</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+        <!-- PAGINATION -->
+        <Pagination TotalPages="TotalPagesHocBa"
+                    CurrentPage="currentPageHocBa"
+                    OnPageChanged="ChangePageHocBa" />
+
     }
+
+
+
+    <!-- ============================================================
+         TAB 2 — DANH SÁCH GÓI TIN
+    ============================================================ -->
+    @if (ActiveTab == 2)
+    {
+        <div class="toolbar">
+
+            <h2 class="page-title">Danh sách gói tin ký số</h2>
+
+            <div class="actions">
+
+                <!-- SEARCH -->
+                <div class="search-box">
+                    <input type="text"
+                           class="search-input"
+                           placeholder="Tìm kiếm gói tin..."
+                           @bind="SearchGoiTin"
+                           @bind:event="oninput" />
+                    <button class="btn-search">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- TABLE -->
+        <div class="grid-panel">
+            <table class="vnedu-table">
+                <thead>
+                    <tr>
+                        <th width="60">STT</th>
+                        <th>TÊN GÓI TIN</th>
+                        <th>NGƯỜI TẠO</th>
+                        <th>NGÀY TẠO</th>
+                        <th>SỐ LƯỢNG HB</th>
+                        <th>TRẠNG THÁI KÝ</th>
+                        <th>THAO TÁC</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var g in PagedGoiTinList)
+                    {
+                        <tr>
+                            <td class="text-center">@g.STT</td>
+
+                            <td style="font-weight:600; color:#003380">
+                                @g.TenGoi
+                            </td>
+
+                            <td>@g.NguoiTao</td>
+
+                            <td>@g.NgayTao.ToString("dd/MM/yyyy HH:mm")</td>
+
+                            <td class="text-center">@g.SoLuong</td>
+
+                            <td>
+                                @if (g.TrangThai == 1)
+                                {
+                                    <span class="badge badge-green">Hoàn thành</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-yellow">Đang ký</span>
+                                }
+                            </td>
+
+                            <td>
+                                <button class="btn-icon" @onclick="() => TaiGoi(g)">
+                                    <i class="bi bi-download"></i>
+                                </button>
+
+                                <button class="btn-icon text-danger"
+                                        @onclick="() => RequestDelete(g)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- PAGINATION -->
+        <Pagination TotalPages="TotalPagesGoiTin"
+                    CurrentPage="currentPageGoiTin"
+                    OnPageChanged="ChangePageGoiTin" />
+        <DigHocBaUI.Components.FormComponents.ConfirmDialog @ref="ConfirmRef" OnClose="OnConfirmDelete" />
+
+
+    }
+
 </div>
 
 @code {
-    private int currentPage = 1;
+    /* ========================================
+       TAB CONTROL
+    ======================================== */
+    private int ActiveTab = 1;
+    private void SwitchTab(int tab) => ActiveTab = tab;
+
+
+    /* ========================================
+       SEARCH STATE
+    ======================================== */
+    private string SearchHocBa = "";
+    private string SearchGoiTin = "";
+
+
+    /* ========================================
+       HỌC BẠ — DATA + PAGING + SELECT
+    ======================================== */
+
+    private List<HocBaItem> ListHocBa = new();
+    private HashSet<int> SelectedHocBaIds = new();
+
+    private int currentPageHocBa = 1;
     private int pageSize = 5;
-    private List<HocBa> FullList = new();
 
-    private int TotalItems => FullList.Count;
-    private int TotalPages => (int)Math.Ceiling((double)TotalItems / pageSize);
-    private List<HocBa> PagedList => FullList.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+    private IEnumerable<HocBaItem> FilteredHocBaList =>
+        string.IsNullOrWhiteSpace(SearchHocBa)
+        ? ListHocBa
+        : ListHocBa.Where(x =>
+            x.TenHocSinh.Contains(SearchHocBa, StringComparison.OrdinalIgnoreCase) ||
+            x.MaDinhDanh.Contains(SearchHocBa, StringComparison.OrdinalIgnoreCase));
 
-    private void ChangePage(int newPage) { if (newPage >= 1 && newPage <= TotalPages) currentPage = newPage; }
+    private List<HocBaItem> PagedHocBaList =>
+        FilteredHocBaList
+            .Skip((currentPageHocBa - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
 
+    private int TotalPagesHocBa =>
+        Math.Max(1, (int)Math.Ceiling((double)FilteredHocBaList.Count() / pageSize));
+
+    private void ChangePageHocBa(int page) =>
+        currentPageHocBa = Math.Clamp(page, 1, TotalPagesHocBa);
+
+
+    /* ===== SELECT CHECKBOX ===== */
+    private void ToggleSelection(int id)
+    {
+        if (SelectedHocBaIds.Contains(id))
+            SelectedHocBaIds.Remove(id);
+        else
+            SelectedHocBaIds.Add(id);
+    }
+
+    private void ToggleSelectAll(ChangeEventArgs e)
+    {
+        var all = FilteredHocBaList.Select(x => x.Id).ToList();
+
+        if (all.All(id => SelectedHocBaIds.Contains(id)))
+            SelectedHocBaIds.ExceptWith(all); // Unselect all
+        else
+            SelectedHocBaIds.UnionWith(all);  // Select all
+    }
+
+
+    /* ===== TẠO GÓI TIN ===== */
+    private void TaoGoiTinMoi()
+    {
+        if (!SelectedHocBaIds.Any())
+            return;
+
+        var newGoi = new GoiTinItem
+        {
+            STT = ListGoiTin.Count + 1,
+            TenGoi = $"Gói tin {DateTime.Now:HH:mm:ss}",
+            NguoiTao = "Cô Uyên",
+            NgayTao = DateTime.Now,
+            SoLuong = SelectedHocBaIds.Count,
+            TrangThai = 0
+        };
+
+        ListGoiTin.Insert(0, newGoi);
+
+        SelectedHocBaIds.Clear();
+        ActiveTab = 2;
+    }
+
+
+
+    /* ========================================
+       GÓI TIN — DATA + PAGING + SEARCH
+    ======================================== */
+
+    private List<GoiTinItem> ListGoiTin = new();
+
+    private int currentPageGoiTin = 1;
+
+    private IEnumerable<GoiTinItem> FilteredGoiTinList =>
+        string.IsNullOrWhiteSpace(SearchGoiTin)
+        ? ListGoiTin
+        : ListGoiTin.Where(x =>
+            x.TenGoi.Contains(SearchGoiTin, StringComparison.OrdinalIgnoreCase) ||
+            x.NguoiTao.Contains(SearchGoiTin, StringComparison.OrdinalIgnoreCase));
+
+    private List<GoiTinItem> PagedGoiTinList =>
+        FilteredGoiTinList
+            .Skip((currentPageGoiTin - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+    private int TotalPagesGoiTin =>
+        Math.Max(1, (int)Math.Ceiling((double)FilteredGoiTinList.Count() / pageSize));
+
+    private void ChangePageGoiTin(int page) =>
+        currentPageGoiTin = Math.Clamp(page, 1, TotalPagesGoiTin);
+
+
+    private void TaiGoi(GoiTinItem item)
+    {
+        Console.WriteLine($"Downloading {item.TenGoi}");
+    }
+
+    // private async Task HuyGoi(GoiTinItem item)
+    // {
+    //     var message = $"Bạn có chắc muốn hủy gói '{item.TenGoi}'?";
+
+    //     bool confirmed = await JS.InvokeAsync<bool>("confirmDelete", message);
+
+    //     if (!confirmed)
+    //         return;
+
+    //     ListGoiTin.Remove(item);
+    //     currentPageGoiTin = Math.Clamp(currentPageGoiTin, 1, TotalPagesGoiTin);
+    // }
+
+    private ConfirmDialog ConfirmRef;
+
+    private GoiTinItem _pendingDeleteItem;
+
+    private void RequestDelete(GoiTinItem item)
+    {
+        _pendingDeleteItem = item;
+        ConfirmRef.Show("Xác nhận hủy gói", $"Bạn có muốn hủy '{item.TenGoi}'?");
+    }
+
+    private void OnConfirmDelete(bool accepted)
+    {
+        if (!accepted) return;
+
+        if (_pendingDeleteItem != null)
+        {
+            ListGoiTin.Remove(_pendingDeleteItem);
+            _pendingDeleteItem = null;
+
+            currentPageGoiTin = Math.Clamp(currentPageGoiTin, 1, TotalPagesGoiTin);
+        }
+    }
+
+
+
+
+    /* ========================================
+       MODELS
+    ======================================== */
+
+    public class HocBaItem
+    {
+        public int Id { get; set; }
+        public int STT { get; set; }
+        public string MaDinhDanh { get; set; }
+        public string TenHocSinh { get; set; }
+    }
+
+    public class GoiTinItem
+    {
+        public int STT { get; set; }
+        public string TenGoi { get; set; }
+        public string NguoiTao { get; set; }
+        public DateTime NgayTao { get; set; }
+        public int SoLuong { get; set; }
+        public int TrangThai { get; set; }
+    }
+
+
+    /* ========================================
+       INIT MOCK DATA
+    ======================================== */
     protected override void OnInitialized()
     {
-        for (int i = 1; i <= 12; i++)
+        // Mock học bạ
+        for (int i = 1; i <= 15; i++)
         {
-            FullList.Add(new HocBa { STT = i, Lop = $"1A{i}", SoHocBaPhatHanh = "0/44", IsBanHanh = i % 2 == 0 });
+            ListHocBa.Add(new HocBaItem
+            {
+                Id = i,
+                STT = i,
+                MaDinhDanh = $"HS2024{i:000}",
+                TenHocSinh = $"Nguyễn Văn Học Sinh {i}"
+            });
+        }
+
+        // Mock gói tin
+        for (int i = 1; i <= 5; i++)
+        {
+            ListGoiTin.Add(new GoiTinItem
+            {
+                STT = i,
+                TenGoi = $"Gói phát hành đợt {i} - Lớp 1A1",
+                NguoiTao = "Cô Uyên",
+                NgayTao = DateTime.Now.AddDays(-i),
+                SoLuong = 10,
+                TrangThai = i % 2
+            });
         }
     }
 }

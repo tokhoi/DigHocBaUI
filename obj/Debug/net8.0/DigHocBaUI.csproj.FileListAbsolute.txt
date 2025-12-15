@@ -92,3 +92,5 @@ D:\STUDY\VS CSharp\Some Demo PAge\DigHocBaUI\DigHocBaUI\obj\Debug\net8.0\scopedc
 D:\STUDY\VS CSharp\Some Demo PAge\DigHocBaUI\DigHocBaUI\obj\Debug\net8.0\scopedcss\Components\Pages\SoDauBai\SDB_KeHoachGiangDay.razor.rz.scp.css
 D:\STUDY\VS CSharp\Some Demo PAge\DigHocBaUI\DigHocBaUI\obj\Debug\net8.0\scopedcss\Components\Pages\SoDauBai\SDB_PhanQuyenKyThay.razor.rz.scp.css
 D:\STUDY\VS CSharp\Some Demo PAge\DigHocBaUI\DigHocBaUI\obj\Debug\net8.0\scopedcss\Components\Pages\SoDauBai\SDB_ToChucNhanSu.razor.rz.scp.css
+D:\STUDY\VS CSharp\Some Demo PAge\DigHocBaUI\DigHocBaUI\obj\Debug\net8.0\scopedcss\Components\Pages\HocBa\HB_ChiTietHocBa.razor.rz.scp.css
+D:\STUDY\VS CSharp\Some Demo PAge\DigHocBaUI\DigHocBaUI\obj\Debug\net8.0\scopedcss\Components\FormComponents\ConfirmDialog.razor.rz.scp.css

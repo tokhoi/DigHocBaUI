@@ -17,6 +17,8 @@ build_property.SupportLocalizedComponentNames =
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = D:\STUDY\VS CSharp\Some Demo PAge\DigHocBaUI\DigHocBaUI
 build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
 
 [D:/STUDY/VS CSharp/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/App.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
@@ -34,6 +36,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/STUDY/VS CSharp/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pagination.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdpbmF0aW9uLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/STUDY/VS CSharp/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -45,6 +51,10 @@ build_metadata.AdditionalFiles.CssScope =
 [D:/STUDY/VS CSharp/Some Demo PAge/DigHocBaUI/DigHocBaUI/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
+
+[D:/STUDY/VS CSharp/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/FormComponents/ConfirmDialog.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGb3JtQ29tcG9uZW50c1xDb25maXJtRGlhbG9nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-548wzisuuj
 
 [D:/STUDY/VS CSharp/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/FormComponents/DangNhapDongBo.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGb3JtQ29tcG9uZW50c1xEYW5nTmhhcERvbmdCby5yYXpvcg==
@@ -61,6 +71,10 @@ build_metadata.AdditionalFiles.CssScope = b-rthkok19l8
 [D:/STUDY/VS CSharp/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-7l9s5fp2nc
+
+[D:/STUDY/VS CSharp/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/HocBa/HB_ChiTietHocBa.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb2NCYVxIQl9DaGlUaWV0SG9jQmEucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-lqryx618ve
 
 [D:/STUDY/VS CSharp/Some Demo PAge/DigHocBaUI/DigHocBaUI/Components/Pages/HocBa/HB_DangKyChuKySo.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb2NCYVxIQl9EYW5nS3lDaHVLeVNvLnJhem9y
